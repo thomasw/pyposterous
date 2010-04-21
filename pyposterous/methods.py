@@ -14,14 +14,12 @@ def build_method(**conf):
         def __init__(self, api, args, kwargs):
             self.api = api
 
-            # Raise an exception if authentication is required but not
-            # specified
+            # Raise an exception if authentication is required but credentials
+            # are not specified
             if self.auth_required and not (self.api.username and self.api.password):           
                 raise PyposterousError('Authentication is required to use this method.')
             
-            # Generate API call url using http
-            self.url = "http://%s%s" % (self.api.host, self.path)
-            
+            self.url = "http://%s%s" % (self.api.host, self.path)            
             self.__verify_args(args, kwargs)
         
         def __verify_args(self, args, kwargs):

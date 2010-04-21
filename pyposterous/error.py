@@ -1,6 +1,5 @@
 class PyposterousError(Exception):
     """Pyposterous exception that accepts an optional posterous error code."""
-
     def __init__(self, error, error_code=None):
         self.error_message = error
         self.error_code = error_code

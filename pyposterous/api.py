@@ -5,8 +5,7 @@ from pyposterous.methods import build_method
 from pyposterous.methods import METHODS
 
 class API(object):
-    """Posterous API"""
-    
+    """Posterous API"""    
     def __init__(self, username='', password='', host='posterous.com'):
         self.username = username
         self.password = password
