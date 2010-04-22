@@ -45,29 +45,36 @@ class Parser(object):
         # TODO: Post something to the Post. API discusssion group asking about
         # this.
         # Troublesome api calls: get_post
+        tag = element.tag.lower()
+        val = element.text
+        
         if obj is None:
-            if element_map.get(element.tag):
+            if element_map.get(tag):
                 prop_val = self.build_object(element)
             else:
-                pro_val = element.text
-            setattr(self.output[-1], element.tag, pro_val)
-            
+                pro_val = val
+            try:
+                setattr(self.output[-1], tag, pro_val)
+            except IndexError:
+                # There was nothing in self.output - weird.
+                pass
             return obj
             
         obj = obj(self.api)
         # Add properties for all of element's children        
         for prop in element.getchildren():
-            if element_map.get(prop.tag):
+            prop_tag = prop.tag.lower()
+            if element_map.get(prop_tag):
                 # If the element is one of our base types, we need to create
                 # an object of it. This should only happen for media assets, so
                 # we force it to be a list.
-                if not hasattr(obj, prop.tag):
-                    setattr(obj, prop.tag, [self.build_object(prop),])
+                if not hasattr(obj, prop_tag):
+                    setattr(obj, prop_tag, [self.build_object(prop),])
                 else:
-                    getattr(obj, prop.tag).append(self.build_object(prop))
+                    getattr(obj, prop_tag).append(self.build_object(prop))
             else:
                 # Base case - set a property called prop.tag in obj
-                setattr(obj, prop.tag, self.clean_value(prop.tag, prop.text))
+                setattr(obj, prop_tag, self.clean_value(prop_tag, prop.text))
         
         return obj
     
