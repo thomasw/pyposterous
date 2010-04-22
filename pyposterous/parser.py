@@ -1,12 +1,14 @@
 import xml.etree.ElementTree as ET
 
+from pyposterous.error import PyposterousError
 from pyposterous.models import element_map
 
 class Parser(object):
     """This object is responsible for parsing the Pyposterous API data and 
     returning nice Python objects."""
     
-    def __init__(self, resource, return_conf):
+    def __init__(self, api, resource, return_conf):
+        self.api = api
         self.resource = resource
         self.return_conf = return_conf
         self.xml = ET.parse(self.resource)
@@ -32,6 +34,9 @@ class Parser(object):
     def build_object(self, element):
         """Accepts an element tree element and builds an object based on the
         type."""
+        if element.tag == 'err':
+            self.build_error(element)
+        
         obj = element_map.get(element.tag)
         
         # Some Posterous calls don't seem to properly nest the XML. If the
@@ -49,7 +54,7 @@ class Parser(object):
             
             return obj
             
-        obj = obj()
+        obj = obj(self.api)
         # Add properties for all of element's children        
         for prop in element.getchildren():
             if element_map.get(prop.tag):
@@ -65,6 +70,11 @@ class Parser(object):
                 setattr(obj, prop.tag, self.clean_value(prop.tag, prop.text))
         
         return obj
+    
+    def build_error(self, element):
+        """Throws a PyposterousError based on the element specified.
+        """
+        raise PyposterousError(element.get('msg'), element.get('code'))
     
     def clean_value(self, name, value):
         return value
