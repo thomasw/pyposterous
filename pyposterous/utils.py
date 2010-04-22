@@ -30,3 +30,7 @@ def docstring_trim(docstring):
         trimmed.pop(0)
     # Return a single string:
     return '\n'.join(trimmed)
+    
+def bool_string(string):
+    """Returns True if the input string contains any form of the string 'True'."""
+    return string.upper() == 'TRUE'
