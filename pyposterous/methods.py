@@ -1,3 +1,5 @@
+import urllib
+
 from pyposterous.error import PyposterousError
 from pyposterous.idl import METHODS
 from pyposterous.utils import docstring_trim
@@ -96,7 +98,15 @@ def build_method(**conf):
             self.args[name] = value
         
         def execute(self):
-            return "Executing %s" % self.url
+            # Anything with TEST in the URL is a test function, not a real API
+            # call
+            if 'TEST' in self.url:
+                return None
+                
+            data = urllib.urlencode(self.args)            
+            response = urllib.urlopen(self.url, data).read()
+            
+            return response
             
     def _method(api, *args, **kwargs):
         method = MethodFactory(api, args, kwargs)
