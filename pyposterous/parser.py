@@ -1,7 +1,7 @@
 import xml.etree.ElementTree as ET
 
 from pyposterous.error import PyposterousError
-from pyposterous.models import element_map
+from pyposterous.models import element_map, attribute_map
 
 class Parser(object):
     """This object is responsible for parsing the Pyposterous API data and 
@@ -77,4 +77,7 @@ class Parser(object):
         raise PyposterousError(element.get('msg'), element.get('code'))
     
     def clean_value(self, name, value):
+        for names in attribute_map:
+            if name in names:
+                return attribute_map.get(names)(value)
         return value
