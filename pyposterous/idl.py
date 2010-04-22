@@ -209,5 +209,14 @@ METHODS = {
             'auth_required':True,
             '__doc__':"Not a real API call. Only used by the unit tests.",
         },
+        'test_all_optional':{
+            'path':'TEST',
+            'parameters':[
+                ('id', int, ['optional']),
+                ('test', str, ['optional']),
+            ],
+            'auth_required':False,
+            '__doc__':"Not a real API call. Only used by the unit tests.",
+        }
     }
 }
