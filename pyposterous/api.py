@@ -15,6 +15,7 @@ class API(object):
         self.__build_methods('application')
         self.__build_methods('post.ly')
         self.__build_methods('twitter')
+        self.__build_methods('test')
     
     def __build_methods(self, method_subsection):
         """Add a bound method to this object for each method defined in the 
