@@ -11,8 +11,9 @@ def build_method(**conf):
     """
     class MethodFactory(object):
         path = conf.get('path')
-        params = conf.get('parameters')
-        auth_required = conf.get('auth_required')
+        params = conf.get('parameters', [])
+        auth_required = conf.get('auth_required', False)
+        returns = conf.get('returns', [])
         args = {}
         
         def __init__(self, api, args, kwargs):
@@ -105,7 +106,7 @@ def build_method(**conf):
                 return None
             
             resource = urllib.urlopen(self.url, urllib.urlencode(self.args))
-            parser = Parser(resource)
+            parser = Parser(resource, self.returns)
             
             data = parser.parse()
             resource.close()
