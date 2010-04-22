@@ -116,10 +116,8 @@ class PyposterousAPITests(unittest.TestCase):
     def test_newcomment(self):
         pass
     
-    def test_getsites(self):
-        pass
-    
     def test_getpost(self):
+        self.api.get_sites()
         self.api.get_post(id='cGTv')
     
     def test_upload(self):
