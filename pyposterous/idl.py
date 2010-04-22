@@ -6,6 +6,7 @@ METHODS = {
             'path':'/api/getsites',
             'parameters':(),
             'auth_required':True,
+            'returns': ['force_list',],
             '__doc__':"""Returns a list of all sites owned and authored by
             this user.
             """
@@ -19,6 +20,7 @@ METHODS = {
                 ('page', int, ['optional']),
                 ('tag', str, ['optional'])],
             'auth_required':False,
+            'returns': ['force_list',],
             '__doc__':"""Returns a list of posts based on the specified 
             parameters.
             
@@ -37,6 +39,7 @@ METHODS = {
                 ('site_id', int, ['optional']),
                 ('hostname', str, ['optional'])],
             'auth_required':False,
+            'returns': ['force_list',],
             '__doc__':"""Returns a list of tags based on the specified 
             site.
             
