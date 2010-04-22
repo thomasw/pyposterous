@@ -2,6 +2,7 @@ import urllib
 
 from pyposterous.error import PyposterousError
 from pyposterous.idl import METHODS
+from pyposterous.parser import Parser
 from pyposterous.utils import docstring_trim
 
 def build_method(**conf):
@@ -22,7 +23,7 @@ def build_method(**conf):
             if self.auth_required and not (self.api.username and self.api.password):           
                 raise PyposterousError('Authentication is required to use this method.')
             
-            self.url = "http://%s%s" % (self.api.host, self.path)
+            self.url = "http://%s:%s@%s%s" % (self.api.username, self.api.password, self.api.host, self.path)
             self.__verify_args(list(args), kwargs)
         
         def __verify_args(self, args, kwargs):
@@ -102,11 +103,14 @@ def build_method(**conf):
             # call
             if 'TEST' in self.url:
                 return None
-                
-            data = urllib.urlencode(self.args)            
-            response = urllib.urlopen(self.url, data).read()
+            print self.url
+            resource = urllib.urlopen(self.url, urllib.urlencode(self.args))
+            parser = Parser(resource)
             
-            return response
+            data = parser.parse()
+            resource.close()
+            
+            return data
             
     def _method(api, *args, **kwargs):
         method = MethodFactory(api, args, kwargs)
