@@ -45,17 +45,24 @@ def build_method(**conf):
                 
                 if name in kwargs:
                     if not value:
-                        value = kwargs.get(name)
+                        try:
+                            value = kwargs.pop(name)
+                        except:
+                            pass
                     else:
                         raise TypeError("got multiple values for keyword argument '%s'" % name)
                 
                 # Make p_type a list if it isn't already.
                 if type(p_type) is not tuple:
                     p_type = (p_type,)
-
+                
                 self.__verify_type(value, p_type, name)
                 self.__verify_options(value, config, name)
-                self.__clean_and_set_value(name, value)
+                if value is not None:
+                    self.__clean_and_set_value(name, value)
+            
+            if kwargs:
+                raise TypeError("function got an unexpected keyword argument. %s" % kwargs)
                 
         def __verify_type(self, value, p_type, name):
             """Check to make sure that the type of the value specified is in 
@@ -105,8 +112,9 @@ def build_method(**conf):
             if 'TEST' in self.url:
                 return None
             
+            print self.args
             resource = urllib.urlopen(self.url, urllib.urlencode(self.args))
-            parser = Parser(resource, self.returns)
+            parser = Parser(self.api, resource, self.returns)
             
             data = parser.parse()
             resource.close()
