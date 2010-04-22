@@ -6,14 +6,18 @@ from pyposterous import API
 from pyposterous.error import PyposterousError
 from pyposterous.idl import METHODS
 
-# Configuration 
-# Posterous - Enter posterous credentials below
-p_username = 'test'
-p_password = 'test'
+try:
+    from test_settings import p_username, p_password, t_username, t_password
+except:
+    # Create a file called test_settings.py to override these settings:
+    # Posterous - Enter posterous credentials below
+    p_username = 'test'
+    p_password = 'test'
 
-# Twitter - Enter Twitter credentials below
-t_username = 'test'
-t_password = 'test'
+    # Twitter - Enter Twitter credentials below
+    t_username = 'test'
+    t_password = 'test'
+
 
 
 class PyposterousAPITests(unittest.TestCase):    
@@ -92,7 +96,7 @@ class PyposterousAPITests(unittest.TestCase):
     
     # Test base API calls.
     def test_getsites(self):
-        pass
+        self.api.get_sites()
         
     def test_readposts(self):
         pass
@@ -113,7 +117,7 @@ class PyposterousAPITests(unittest.TestCase):
         pass
     
     def test_getpost(self):
-        print self.api.get_post(id='cGTv')
+        self.api.get_post(id='cGTv')
     
     def test_upload(self):
         pass
