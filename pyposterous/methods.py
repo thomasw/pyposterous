@@ -326,7 +326,7 @@ METHODS = {
             """        
         },
     },
-    # NOT REAL API CALLS - usedd for testing.
+    # NOT REAL API CALLS - used for testing.
     'test': {
         'test':{
             'path':'TEST',
