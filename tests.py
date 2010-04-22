@@ -3,6 +3,7 @@ import types
 import unittest
 
 from pyposterous import API
+from pyposterous.error import PyposterousError
 from pyposterous.methods import METHODS
 
 # Configuration 
@@ -79,6 +80,10 @@ class PyposterousAPITests(unittest.TestCase):
                 raise
         else:
             fail("Expected a TypeError")
+    
+    def test_method_auth_check(self):
+        api = API()
+        self.assertRaises(PyposterousError, api.test_auth_required)
     
     def test_method_valid_calls(self):
         self.api.test('test', 1,)
