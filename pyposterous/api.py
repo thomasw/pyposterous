@@ -2,7 +2,7 @@ import types
 
 from pyposterous.error import PyposterousError
 from pyposterous.methods import build_method
-from pyposterous.methods import METHODS
+from pyposterous.idl import METHODS
 
 class API(object):
     """Posterous API"""    

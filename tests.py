@@ -4,7 +4,7 @@ import unittest
 
 from pyposterous import API
 from pyposterous.error import PyposterousError
-from pyposterous.methods import METHODS
+from pyposterous.idl import METHODS
 
 # Configuration 
 # Posterous - Enter posterous credentials below
