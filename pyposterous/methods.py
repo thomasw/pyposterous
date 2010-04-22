@@ -112,7 +112,6 @@ def build_method(**conf):
             if 'TEST' in self.url:
                 return None
             
-            print self.args
             resource = urllib.urlopen(self.url, urllib.urlencode(self.args))
             parser = Parser(self.api, resource, self.returns)
             
