@@ -18,7 +18,25 @@ class Site(PosterousData):
                 raise PyposterousError('No ID or hostname has been specified for this site object.')
 
 class Post(PosterousData):
-    pass
+    def update_post(self, media=None):
+        """Updates the post this object represents based on the values of 
+        post_id, title, and body.
+        
+        media -- a list of files to upload to the existing post.
+        """
+        kwargs = {}
+        try:
+            kwargs['post_id'] = self.id
+        except:
+            raise PyposterousError('No post_id specified for this Post object.')
+        
+        if self.title:
+            kwargs['title'] = self.title
+        
+        if self.body:
+            kwargs['body'] = self.body
+            
+        self.api.update_post(**kwargs)
 
 class Comment(PosterousData):
     pass
@@ -37,5 +55,5 @@ element_map = {
 # Attributes specified in the key are cleaned by the function specified in 
 # the value
 attribute_map = {
-    ('id', 'views', 'filesize', 'height', 'width', 'commentscount', 'num_posts'):int,
+    ('id', 'views', 'filesize', 'height', 'width', 'commentscount', 'num_posts',):int,
     ('private', 'commentsenabled', 'primary'):bool_string,}
