@@ -89,7 +89,37 @@ class PyposterousAPITests(unittest.TestCase):
         self.api.test('test', 1,)
         self.api.test(id='test', test=1)
         self.api.test('test', test=1)
+    
+    # Test base API calls.
+    def test_getsites(self):
+        pass
         
+    def test_readposts(self):
+        pass
+        
+    def test_gettags(self):
+        pass
+    
+    def test_newpost(self):
+        pass
+        
+    def test_updatepost(self):
+        pass
+    
+    def test_newcomment(self):
+        pass
+    
+    def test_getsites(self):
+        pass
+    
+    def test_getpost(self):
+        print self.api.get_post(id='cGTv')
+    
+    def test_upload(self):
+        pass
+    
+    def test_uploadAndPost(self):
+        pass
             
 if __name__ == '__main__':
     unittest.main()
