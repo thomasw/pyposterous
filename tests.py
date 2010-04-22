@@ -88,6 +88,15 @@ class PyposterousAPITests(unittest.TestCase):
         else:
             fail("Expected a TypeError")
     
+    def test_method_invalid_kwarg(self):
+        try:
+            self.api.test_all_optional(1, yay=2,)
+        except TypeError, e:
+            if not "%s" % e == "function got an unexpected keyword argument. {'yay': 2}":
+                raise
+        else:
+            fail("Expected a TypeError")
+            
     def test_method_auth_check(self):
         api = API()
         self.assertRaises(PyposterousError, api.test_auth_required)
@@ -96,28 +105,68 @@ class PyposterousAPITests(unittest.TestCase):
         self.api.test('test', 1,)
         self.api.test(id='test', test=1)
         self.api.test('test', test=1)
+        self.api.test_all_optional(1, 'yay')
     
     # Test base API calls.
     def test_getsites(self):
-        self.api.get_sites()
+        sites = self.api.get_sites()
+        for site in sites:
+            site.id
+            site.name
+            site.url
+            site.private
+            site.primary
+            site.commentsenabled
+            site.num_posts
         
     def test_readposts(self):
-        pass
+        posts = self.api.read_posts(site_id=1267571)
+        for post in posts:
+            post.url
+            post.link
+            post.title
+            post.id
+            post.body
+            post.date
+            post.views
+            post.private
+            post.author
+            post.commentsenabled
         
     def test_gettags(self):
-        pass
+        sites = self.api.get_sites()
+        for site in sites:
+            tags = site.get_tags()
+            for tag in tags:
+                tag.id
+                tag.tag_string
+                tag.count
+        else:
+            if len(sites) == 0:
+                self.api.get_tags(site_id=1267571)
     
-    def test_newpost(self):
-        pass
+    def test_newpost_getpost_updatepost(self):
+        body = "This is a test post."
+        title = 'Test.'
         
-    def test_updatepost(self):
-        pass
+        # Test new_post and get_post
+        posted_post = self.api.new_post(body=body, title=title)
+        read_post = self.api.get_post(id=posted_post.url.replace('http://post.ly/', ''))
+        self.assertEqual(read_post.body.strip(), body)
+        self.assertEqual(read_post.title, title)
+        
+        # Test update_post and get_post
+        new_title = 'Test title.'
+        new_body = 'Test body!'
+        read_post.title = new_title
+        read_post.body = new_body
+        read_post.update_post()        
+        read_post = self.api.get_post(id=posted_post.url.replace('http://post.ly/', ''))
+        self.assertEqual(read_post.body.strip(), new_body)
+        self.assertEqual(read_post.title, new_title)        
     
     def test_newcomment(self):
         pass
-    
-    def test_getpost(self):
-        self.api.get_post(id='cGTv')
     
     def test_upload(self):
         pass
