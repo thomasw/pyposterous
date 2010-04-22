@@ -7,9 +7,12 @@ from pyposterous.error import PyposterousError
 from pyposterous.idl import METHODS
 
 try:
+    # Create a file called test_settings.py in the same dir as this file to 
+    # override the settings in the except clause below. Use the except clause
+    # as a template for your test_settings.py file
+    # test_settings.py is in .gitignore, so it shouldn't be committed.
     from test_settings import p_username, p_password, t_username, t_password
-except:
-    # Create a file called test_settings.py to override these settings:
+except:    
     # Posterous - Enter posterous credentials below
     p_username = 'test'
     p_password = 'test'
