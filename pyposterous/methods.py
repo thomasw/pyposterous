@@ -103,7 +103,7 @@ def build_method(**conf):
             # call
             if 'TEST' in self.url:
                 return None
-            print self.url
+            
             resource = urllib.urlopen(self.url, urllib.urlencode(self.args))
             parser = Parser(resource)
             
