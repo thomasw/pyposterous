@@ -10,15 +10,14 @@ def build_method(**conf):
     Builds python functions based on the specified METHOD configuration
     """
     class MethodFactory(object):
-        path = conf.get('path')
-        params = conf.get('parameters', [])
-        auth_required = conf.get('auth_required', False)
-        returns = conf.get('returns', [])
-        args = {}
-        
         def __init__(self, api, args, kwargs):
             self.api = api
-
+            self.args = {}
+            self.path = conf.get('path')
+            self.params = conf.get('parameters', [])
+            self.auth_required = conf.get('auth_required', False)
+            self.returns = conf.get('returns', [])
+            
             # Raise an exception if authentication is required but credentials
             # are not specified
             if self.auth_required and not (self.api.username and self.api.password):           
