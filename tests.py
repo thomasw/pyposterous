@@ -11,11 +11,12 @@ try:
     # override the settings in the except clause below. Use the except clause
     # as a template for your test_settings.py file
     # test_settings.py is in .gitignore, so it shouldn't be committed.
-    from test_settings import p_username, p_password, t_username, t_password
+    from test_settings import p_username, p_password, t_username, t_password, name_of_first_blog
 except:    
     # Posterous - Enter posterous credentials below
     p_username = 'test'
     p_password = 'test'
+    name_of_first_blog = 'pyposttest'
 
     # Twitter - Enter Twitter credentials below
     t_username = 'test'
@@ -118,6 +119,7 @@ class PyposterousAPITests(unittest.TestCase):
             site.primary
             site.commentsenabled
             site.num_posts
+        sites[0].new_post(title="post_object_test", body="hurray!")
         
     def test_readposts(self):
         posts = self.api.read_posts(site_id=1267571)
@@ -146,28 +148,33 @@ class PyposterousAPITests(unittest.TestCase):
                 self.api.get_tags(site_id=1267571)
     
     def test_newpost_getpost_updatepost_newcomment(self):
+        from datetime import datetime, timedelta
+        
         body = "This is a test post."
         title = 'Test.'
-        
+        date = datetime.now()+timedelta(hours=4)
         # Test new_post, get_post, and new_comment
-        posted_post = self.api.new_post(body=body, title=title)
+        posted_post = self.api.new_post(body=body, title=title, date=date)
         
         new_comment = self.api.new_comment(posted_post.id, 'Great post!',)
-        posted_post.new_comment('That wasn\'t very helpful!',)
         posted_post.new_comment('Great comment!', 'Jane Doe', 'test@test1.com')
-        posted_post.new_comment('I hate you!',)        
-        posted_post.new_comment('I love you!',)        
+        posted_post.new_comment('I hate you!',)
         read_post = self.api.get_post(id=posted_post.url.replace('http://post.ly/', ''))
-
-        self.assertEqual(read_post.comments[0].author, 'pyposttest')
+        
+        # Test Comments
+        self.assertEqual(read_post.comments[0].author, name_of_first_blog)
         self.assertEqual(read_post.comments[0].body, 'Great post!')
-        self.assertEqual(read_post.comments[2].author, 'Jane Doe')
-        self.assertEqual(read_post.comments[2].body, 'Great comment!')
-        self.assertEqual(read_post.comments[-1].author, 'pyposttest')
-        self.assertEqual(read_post.comments[-1].body, 'I love you!')        
+        self.assertEqual(read_post.comments[1].author, 'Jane Doe')
+        self.assertEqual(read_post.comments[1].body, 'Great comment!')
+        self.assertEqual(read_post.comments[2].author, name_of_first_blog)
+        self.assertEqual(read_post.comments[2].body, 'I hate you!')
+        self.assertEqual(read_post.commentscount, 3)
+        
+        # Test Post Content
         self.assertEqual(read_post.body.strip(), body)
         self.assertEqual(read_post.title, title)
-        self.assertEqual(read_post.commentscount, 5)
+        #self.assertEqual(read_post.date.strftime('%a, %d %b %Y %H:%M:%S'), date.strftime('%a, %d %b %Y %H:%M:%S'))
+        # This will fail. Posterous is returning times 7 hours off of GMT.
         
         # Test update_post and get_post
         new_title = 'Test title.'
