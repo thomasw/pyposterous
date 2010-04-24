@@ -36,7 +36,10 @@ class Post(PosterousData):
         if self.body:
             kwargs['body'] = self.body
             
-        self.api.update_post(**kwargs)
+        return self.api.update_post(**kwargs)
+        
+    def new_comment(self, body, name=None, email=None, date=None):
+        return self.api.new_comment(self.id, body, name, email, date)
 
 class Comment(PosterousData):
     pass
@@ -56,4 +59,5 @@ element_map = {
 # the value
 attribute_map = {
     ('id', 'views', 'filesize', 'height', 'width', 'commentscount', 'num_posts',):int,
-    ('private', 'commentsenabled', 'primary'):bool_string,}
+    ('private', 'commentsenabled', 'primary'):bool_string,
+    ('body',):lambda x: x.strip()} # Hopefully whitespace will not be significant. 
