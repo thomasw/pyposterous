@@ -23,7 +23,7 @@ class Site(PosterousData):
     
     def new_post(self, media=None, title=None, body=None, autopost=None, private=None, date=None, tags=None, source=None, sourceLink=None):
         """Posts a new blog post to this site using self.id"""
-        return self.api.new_post(self.id, media, title, body, autopost, private, date, tags, source, sourcelink)
+        return self.api.new_post(self.id, media, title, body, autopost, private, date, tags, source, sourceLink)
 
 class Post(PosterousData):
     def update_post(self, media=None):
