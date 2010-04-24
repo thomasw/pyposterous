@@ -1,3 +1,5 @@
+from datetime import datetime
+
 # Posterous IDL
 METHODS = {
     # Base read and write Methods
@@ -58,7 +60,7 @@ METHODS = {
                 ('body', str, ['optional']),
                 ('autopost', bool, ['optional']),
                 ('private', bool, ['optional']),
-                ('date', str, ['optional']),
+                ('date', datetime, ['optional']),
                 ('tags', str, ['optional']),
                 ('source', str, ['optional']),
                 ('sourceLink', str, ['optional']),
@@ -106,7 +108,7 @@ METHODS = {
                 ('comment', str, []),
                 ('name', str, ['optional']),
                 ('email', str, ['optional']),
-                ('date', str, ['optional']),
+                ('date', datetime, ['optional']),
             ],
             'auth_required':True,
             '__doc__':"""Adds a comment to the specified post.
