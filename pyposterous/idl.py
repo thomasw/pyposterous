@@ -102,7 +102,7 @@ METHODS = {
         'new_comment':{        
             'path':'/api/newcomment',
             'parameters':[
-                ('post_id', str, []),
+                ('post_id', int, []),
                 ('comment', str, []),
                 ('name', str, ['optional']),
                 ('email', str, ['optional']),
