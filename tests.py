@@ -145,15 +145,29 @@ class PyposterousAPITests(unittest.TestCase):
             if len(sites) == 0:
                 self.api.get_tags(site_id=1267571)
     
-    def test_newpost_getpost_updatepost(self):
+    def test_newpost_getpost_updatepost_newcomment(self):
         body = "This is a test post."
         title = 'Test.'
         
-        # Test new_post and get_post
+        # Test new_post, get_post, and new_comment
         posted_post = self.api.new_post(body=body, title=title)
+        
+        new_comment = self.api.new_comment(posted_post.id, 'Great post!',)
+        posted_post.new_comment('That wasn\'t very helpful!',)
+        posted_post.new_comment('Great comment!', 'Jane Doe', 'test@test1.com')
+        posted_post.new_comment('I hate you!',)        
+        posted_post.new_comment('I love you!',)        
         read_post = self.api.get_post(id=posted_post.url.replace('http://post.ly/', ''))
+
+        self.assertEqual(read_post.comments[0].author, 'pyposttest')
+        self.assertEqual(read_post.comments[0].body, 'Great post!')
+        self.assertEqual(read_post.comments[2].author, 'Jane Doe')
+        self.assertEqual(read_post.comments[2].body, 'Great comment!')
+        self.assertEqual(read_post.comments[-1].author, 'pyposttest')
+        self.assertEqual(read_post.comments[-1].body, 'I love you!')        
         self.assertEqual(read_post.body.strip(), body)
         self.assertEqual(read_post.title, title)
+        self.assertEqual(read_post.commentscount, 5)
         
         # Test update_post and get_post
         new_title = 'Test title.'
@@ -163,10 +177,7 @@ class PyposterousAPITests(unittest.TestCase):
         read_post.update_post()        
         read_post = self.api.get_post(id=posted_post.url.replace('http://post.ly/', ''))
         self.assertEqual(read_post.body.strip(), new_body)
-        self.assertEqual(read_post.title, new_title)        
-    
-    def test_newcomment(self):
-        pass
+        self.assertEqual(read_post.title, new_title)
     
     def test_upload(self):
         pass
