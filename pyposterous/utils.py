@@ -31,6 +31,19 @@ def docstring_trim(docstring):
     # Return a single string:
     return '\n'.join(trimmed)
     
-def bool_string(string):
-    """Returns True if the input string contains any form of the string 'True'."""
-    return string.upper() == 'TRUE'
+def parse_date(time_string):
+    """Returns a UTC datetime object based on a string representation of time
+    in this format: %a, %d %b %Y %H:%M:%S %z"""
+    from datetime import datetime, timedelta
+    
+    utc_offset_str = time_string[-6:].strip()
+    sign = 1
+    # UTC offset is negative. Trim that -!
+    if utc_offset_str[0] == '-':
+        sign = -1
+        utc_offset_str = utc_offset_str[1:5]
+    
+    utcoffset = sign * timedelta(hours=int(utc_offset_str[0:2]), minutes=int(utc_offset_str[2:4]))
+    
+    return datetime.strptime(time_string[:-6], '%a, %d %b %Y %H:%M:%S') - utcoffset
+
