@@ -1,4 +1,5 @@
 import urllib
+from datetime import datetime
 
 from pyposterous.error import PyposterousError
 from pyposterous.idl import METHODS
@@ -102,7 +103,10 @@ def build_method(**conf):
             
             return True
         
-        def __clean_and_set_value(self, name, value):            
+        def __clean_and_set_value(self, name, value):
+            if type(value) == datetime:
+                value = "%s +0000" % value.strftime('%a, %d %b %Y %H:%M:%S').split('.')[0]
+                
             self.args[name] = value
         
         def execute(self):
@@ -110,7 +114,7 @@ def build_method(**conf):
             # call
             if 'TEST' in self.url:
                 return None
-            
+                
             resource = urllib.urlopen(self.url, urllib.urlencode(self.args))
             parser = Parser(self.api, resource, self.returns)
             
