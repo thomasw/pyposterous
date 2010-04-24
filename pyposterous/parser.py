@@ -11,14 +11,53 @@ class Parser(object):
         self.api = api
         self.resource = resource
         self.return_conf = return_conf
-        self.xml = ET.parse(self.resource)
         self.output = []
+        
+        # If the following is failing, either Posterous is giving us garbage
+        # or there are connection issues occuring. Most likely connection issues.
+        try:
+            self.xml = ET.parse(self.resource)
+        except:
+            if self.resource.getcode() == 200:
+                raise PyposterousError("malformed XML returned by Posterous")
+            raise PyposterousError("%s connection error" % self.resource.getcode())
+        
         
     def parse(self):
         for element in self.xml.getroot().getchildren():
             obj = self.build_object(element)
             if obj:
-                self.output.append(obj)
+                # Okay. This is a little weird. When the Posterous API returns
+                # results, it sometimes returns children elements as children
+                # of their parent (e.g. comments as children of their post),
+                # and sometimes they don't do that, and they just give 
+                # everything as a big hairy list (e.g. both the post AND
+                # its comments at the top level). TODO: Ask dev group about this
+                
+                # To fix this problem, I'm going to append subsequent elements
+                # to the previous element returned if the types don't match.
+                # 3 posts will return a list of 3 posts, 1 post and 2 comments
+                # will return 1 post with a list of 2 comments as an attrib.
+                
+                try:
+                    if type(obj) == type(self.output[-1]):
+                        self.output.append(obj)
+                    else:
+                        attrib = "%ss" % (obj.__class__.__name__,)
+                        attrib = attrib.lower()
+                        
+                        existing = getattr(self.output[-1], attrib, None)                        
+                        if existing and type(existing) == list:
+                            existing.append(obj)
+                        elif not existing:
+                            setattr(self.output[-1], attrib, [obj,])
+                        else:
+                            # If this happens, then my little XML inconsistency
+                            # hack is overwritting a legitimate value.
+                            raise PyposterousError("Posterous API response could not be parsed.")
+                except IndexError:
+                    # There was no previous element!
+                    self.output.append(obj)
         
         output = self.output
         
@@ -54,7 +93,7 @@ class Parser(object):
             else:
                 pro_val = val
             try:
-                setattr(self.output[-1], tag, pro_val)
+                setattr(self.output[-1], tag, self.clean_value(tag, pro_val))
             except IndexError:
                 # There was nothing in self.output - weird.
                 pass
