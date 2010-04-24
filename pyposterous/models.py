@@ -1,5 +1,5 @@
 from pyposterous.error import PyposterousError
-from pyposterous.utils import bool_string
+from pyposterous.utils import parse_date
 
 class PosterousData(object):
     def __init__(self, api):
@@ -16,6 +16,14 @@ class Site(PosterousData):
                 return self.api.get_tags(hostname=self.hostname)
             except TypeError:
                 raise PyposterousError('No ID or hostname has been specified for this site object.')
+                
+    def read_posts(self):
+        """Returns a list of posts for this site using self.id."""
+        return self.api.read_posts(self.id)
+    
+    def new_post(self, media=None, title=None, body=None, autopost=None, private=None, date=None, tags=None, source=None, sourceLink=None):
+        """Posts a new blog post to this site using self.id"""
+        return self.api.new_post(self.id, media, title, body, autopost, private, date, tags, source, sourcelink)
 
 class Post(PosterousData):
     def update_post(self, media=None):
@@ -59,5 +67,7 @@ element_map = {
 # the value
 attribute_map = {
     ('id', 'views', 'filesize', 'height', 'width', 'commentscount', 'num_posts',):int,
-    ('private', 'commentsenabled', 'primary'):bool_string,
-    ('body',):lambda x: x.strip()} # Hopefully whitespace will not be significant. 
+    ('private', 'commentsenabled', 'primary'):lambda x: x.upper() == 'TRUE',
+    ('body',):lambda x: x.strip(), # Hopefully whitespace will not be significant. 
+    ('date',):lambda x: parse_date(x),} 
+    
