@@ -1,2 +1,4 @@
+*.DS_Store
+thumbs.db
 test_settings.py
 *.pyc
