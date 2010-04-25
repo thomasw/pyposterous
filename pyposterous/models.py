@@ -25,12 +25,15 @@ class Site(PosterousData):
         """Posts a new blog post to this site using self.id"""
         return self.api.new_post(self.id, media, title, body, autopost, private, date, tags, source, sourceLink)
 
+class Tag(PosterousData):
+    pass
+
 class Post(PosterousData):
     def update_post(self, media=None):
         """Updates the post this object represents based on the values of 
         post_id, title, and body.
         
-        media -- a list of files to upload to the existing post.
+        media -- a file or a list of files to APPEND to the existing post.
         """
         kwargs = {}
         try:
@@ -38,11 +41,17 @@ class Post(PosterousData):
         except:
             raise PyposterousError('No post_id specified for this Post object.')
         
-        if self.title:
+        try:
             kwargs['title'] = self.title
-        
-        if self.body:
+        except AttributeError:
+            pass
+            
+        try:
             kwargs['body'] = self.body
+        except AttributeError:
+            pass
+        
+        if media: kwargs['media'] = media
             
         return self.api.update_post(**kwargs)
         
@@ -61,6 +70,7 @@ element_map = {
     'post':Post,
     'comment':Comment,
     'Media':Media,
+    'tag':Tag,
     }
 
 # Attributes specified in the key are cleaned by the function specified in 

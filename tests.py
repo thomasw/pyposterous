@@ -22,8 +22,6 @@ except:
     t_username = 'test'
     t_password = 'test'
 
-
-
 class PyposterousAPITests(unittest.TestCase):    
     def setUp(self):
         self.api = API(username=p_username, password=p_password)
@@ -174,7 +172,7 @@ class PyposterousAPITests(unittest.TestCase):
         self.assertEqual(read_post.body.strip(), body)
         self.assertEqual(read_post.title, title)
         #self.assertEqual(read_post.date.strftime('%a, %d %b %Y %H:%M:%S'), date.strftime('%a, %d %b %Y %H:%M:%S'))
-        # This will fail. Posterous is returning times 7 hours off of GMT.
+        # The above will faill because Posterous isn't handling incomming API times as GMT like their docs state
         
         # Test update_post and get_post
         new_title = 'Test title.'
@@ -186,6 +184,31 @@ class PyposterousAPITests(unittest.TestCase):
         self.assertEqual(read_post.body.strip(), new_body)
         self.assertEqual(read_post.title, new_title)
     
+    def test_new_post_single_media(self):
+        # An Image!
+        test_file = open('test_assets/1.jpg')
+        post = self.api.new_post(title='Testing single file upload', media=test_file)
+        test_file.close()
+        
+        # A Word Doc! - Not sure why this fails
+        #test_file = open('test_assets/test.docx')
+        #post = self.api.new_post(title='Testing doc upload', media=test_file)
+        #test_file.close()
+        
+        # A PDF!        
+        test_file = open('test_assets/test.pdf')
+        post.title = "%s - and then adding another file to it!" % post.title
+        post.update_post(media=test_file)
+        test_file.close()
+    
+    def test_new_post_with_multi_media(self):
+        from os import listdir, path
+        images = [open(path.join('test_assets', fname)) for fname in listdir('test_assets') if '.jpg' in fname]
+        
+        self.api.new_post(title='Multi-file upload test!', media=images)
+             
+        [image.close() for image in images]
+        
     def test_upload(self):
         pass
     

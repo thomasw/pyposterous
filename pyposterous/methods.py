@@ -1,4 +1,5 @@
-import urllib
+import urllib2_file
+import urllib2
 from datetime import datetime
 
 from pyposterous.error import PyposterousError
@@ -13,7 +14,7 @@ def build_method(**conf):
     class MethodFactory(object):
         def __init__(self, api, args, kwargs):
             self.api = api
-            self.args = {}
+            self.args = []
             self.path = conf.get('path')
             self.params = conf.get('parameters', [])
             self.auth_required = conf.get('auth_required', False)
@@ -24,7 +25,7 @@ def build_method(**conf):
             if self.auth_required and not (self.api.username and self.api.password):           
                 raise PyposterousError('Authentication is required to use this method.')
             
-            self.url = "http://%s:%s@%s%s" % (self.api.username, self.api.password, self.api.host, self.path)
+            self.url = "http://%s%s" % (self.api.host, self.path)
             self.__verify_args(list(args), kwargs)
         
         def __verify_args(self, args, kwargs):
@@ -106,16 +107,37 @@ def build_method(**conf):
         def __clean_and_set_value(self, name, value):
             if type(value) == datetime:
                 value = "%s +0000" % value.strftime('%a, %d %b %Y %H:%M:%S').split('.')[0]
-                
-            self.args[name] = value
+            
+            if type(value) == bool:
+                value = int(value)
+            
+            if type(value) == int:
+                value = str(value)
+            
+            if type(value) == list:
+                for val in value:
+                    self.args.append(("%s[]" % name, val,))
+                return 
+            
+            self.args.append((name, value,))
         
         def execute(self):
             # Anything with TEST in the URL is a test function, not a real API
             # call
             if 'TEST' in self.url:
                 return None
-                
-            resource = urllib.urlopen(self.url, urllib.urlencode(self.args))
+            
+            # urlopen doesn't like an empty list for 'data', so make it None
+            if not self.args:
+                self.args = None
+            
+            passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
+            passman.add_password(None, self.url, self.api.username, self.api.password)
+            authhandler = urllib2.HTTPBasicAuthHandler(passman)
+            opener = urllib2.build_opener(authhandler)
+            urllib2.install_opener(opener)
+
+            resource = urllib2.urlopen(self.url, self.args)
             parser = Parser(self.api, resource, self.returns)
             
             data = parser.parse()

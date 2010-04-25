@@ -55,7 +55,7 @@ METHODS = {
             'path':'/api/newpost',
             'parameters':[
                 ('site_id', int, ['optional']),
-                ('media', (str, list), ['optional']),
+                ('media', (file, list), ['optional']),
                 ('title', str, ['optional']),
                 ('body', str, ['optional']),
                 ('autopost', bool, ['optional']),
@@ -86,7 +86,7 @@ METHODS = {
             'path':'/api/updatepost',
             'parameters':[
                 ('post_id', int, []),
-                ('media', (str, list), ['optional']),
+                ('media', (file, list), ['optional']),
                 ('title', str, ['optional']),
                 ('body', str, ['optional']),
             ],
@@ -146,7 +146,7 @@ METHODS = {
             'parameters':[
                 ('username', str, []),
                 ('password', str, []),
-                ('media', (str, list), ['optional']),
+                ('media', (file, list), ['optional']),
                 ('message', str, ['optional']),
                 ('body', str, ['optional']),
                 ('source', str, ['optional']),
@@ -171,7 +171,7 @@ METHODS = {
             'parameters':[
                 ('username', str, []),
                 ('password', str, []),
-                ('media', (str, list), ['optional']),
+                ('media', (file, list), ['optional']),
                 ('message', str, ['optional']),
                 ('body', str, ['optional']),
                 ('source', str, ['optional']),
