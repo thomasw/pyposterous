@@ -75,7 +75,7 @@ If you'd like to hire me, check out the [Match Strike](http://matchstrike.net/) 
 
 I looked to [Tweepy](http://github.com/joshthecoder/tweepy) a lot while writing this library. If you're working on something that needs to talk to Twitter, give it a go. You'll love it.
 
-[urllib2_file](http://github.com/seisen/urllib2_file) saved me a lot of time and trouble. Kudos to the [seisen](http://github.com/seisen).
+[urllib2_file](http://github.com/seisen/urllib2_file) saved me a lot of time and trouble. Kudos to [seisen](http://github.com/seisen).
 
 Copyright (c) 2010 [Thomas Welfley](http://cyproject.net/). See [LICENSE](http://github.com/thomasw/pyposterous/blob/master/LICENSE) for details.
     
