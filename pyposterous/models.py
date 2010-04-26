@@ -3,27 +3,30 @@ from pyposterous.utils import parse_date
 
 class PosterousData(object):
     def __init__(self, api):
-        self.api = api
+        self.__api = api
+    
+    def api(self):
+        return self.__api
 
 class Site(PosterousData):    
     def get_tags(self):
         """Returns the tags for this site using self.id first and self.hostname
         second. If neither is specified, a PosterousError is raised."""
         try:
-            return self.api.get_tags(site_id=self.id)
+            return self.api().get_tags(site_id=self.id)
         except TypeError:
             try:
-                return self.api.get_tags(hostname=self.hostname)
+                return self.api().get_tags(hostname=self.hostname)
             except TypeError:
                 raise PyposterousError('No ID or hostname has been specified for this site object.')
                 
     def read_posts(self):
         """Returns a list of posts for this site using self.id."""
-        return self.api.read_posts(self.id)
+        return self.api().read_posts(self.id)
     
     def new_post(self, media=None, title=None, body=None, autopost=None, private=None, date=None, tags=None, source=None, sourceLink=None):
         """Posts a new blog post to this site using self.id"""
-        return self.api.new_post(self.id, media, title, body, autopost, private, date, tags, source, sourceLink)
+        return self.api().new_post(self.id, media, title, body, autopost, private, date, tags, source, sourceLink)
 
 class Tag(PosterousData):
     pass
@@ -53,10 +56,10 @@ class Post(PosterousData):
         
         if media: kwargs['media'] = media
             
-        return self.api.update_post(**kwargs)
+        return self.api().update_post(**kwargs)
         
     def new_comment(self, body, name=None, email=None, date=None):
-        return self.api.new_comment(self.id, body, name, email, date)
+        return self.api().new_comment(self.id, body, name, email, date)
 
 class Comment(PosterousData):
     pass
@@ -64,12 +67,17 @@ class Comment(PosterousData):
 class Media(PosterousData):
     pass
 
+class Image(PosterousData):
+    pass
+
 # Posterous element -> class mapping
 element_map = {
     'site':Site,
     'post':Post,
     'comment':Comment,
-    'Media':Media,
+    'media':Media,
+    'thumb':Image,
+    'medium':Image,
     'tag':Tag,
     }
 
