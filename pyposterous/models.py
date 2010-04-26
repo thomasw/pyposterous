@@ -14,22 +14,36 @@ class Site(PosterousData):
         second. If neither is specified, a PosterousError is raised."""
         try:
             return self.api().get_tags(site_id=self.id)
-        except TypeError:
+        except AttributeError:
             try:
                 return self.api().get_tags(hostname=self.hostname)
-            except TypeError:
+            except AttributeError:
                 raise PyposterousError('No ID or hostname has been specified for this site object.')
                 
-    def read_posts(self):
+    def read_posts(self, num_posts=None, page=None, tag=None):
         """Returns a list of posts for this site using self.id."""
-        return self.api().read_posts(self.id)
+        try:
+            return self.api().read_posts(site_id=self.id, num_posts=num_posts, page=page, tag=tag)
+        except AttributeError:
+            try:
+                return self.api().read_posts(hostname=self.hostname, num_posts=num_posts, page=page, tag=tag)
+            except AttributeError:
+                raise PyposterousError('No ID or hostname has been specified for this site object.')
+            
     
     def new_post(self, media=None, title=None, body=None, autopost=None, private=None, date=None, tags=None, source=None, sourceLink=None):
         """Posts a new blog post to this site using self.id"""
-        return self.api().new_post(self.id, media, title, body, autopost, private, date, tags, source, sourceLink)
+        try:
+            return self.api().new_post(self.id, media, title, body, autopost, private, date, tags, source, sourceLink)
+        except AttributeError:
+            raise PyposterousError('No ID has been specified for this site object.')
 
 class Tag(PosterousData):
-    pass
+    def __str__(self):
+        try:
+            return self.tag_string
+        except AttributeError:
+            return ''
 
 class Post(PosterousData):
     def update_post(self, media=None):
