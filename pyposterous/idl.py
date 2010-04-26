@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from pyposterous.models import Tag
+
 # Posterous IDL
 METHODS = {
     # Base read and write Methods
@@ -20,7 +22,7 @@ METHODS = {
                 ('hostname', str, ['optional']),
                 ('num_posts', int, ['optional']),
                 ('page', int, ['optional']),
-                ('tag', str, ['optional'])],
+                ('tag', (str, Tag), ['optional'])],
             'auth_required':False,
             'returns': ['force_list',],
             '__doc__':"""Returns a list of posts based on the specified 

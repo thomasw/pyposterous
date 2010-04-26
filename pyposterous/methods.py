@@ -6,6 +6,7 @@ from pyposterous.error import PyposterousError
 from pyposterous.idl import METHODS
 from pyposterous.parser import Parser
 from pyposterous.utils import docstring_trim
+from pyposterous.models import Tag
 
 def build_method(**conf):
     """
@@ -118,6 +119,9 @@ def build_method(**conf):
                 for val in value:
                     self.args.append(("%s[]" % name, val,))
                 return 
+            
+            if type(value) == Tag:
+                value = str(value)
             
             self.args.append((name, value,))
         
