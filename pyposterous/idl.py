@@ -70,7 +70,7 @@ METHODS = {
             
             Keyword arguments:
             site_id -- Optional. Id of the site to post to. If not supplied, posts to the user's default site
-            media -- Optional. File data for single file or a list of files
+            media -- Optional. File object for single file or a list of file objects.
             title -- Optional. Title of post
             body -- Optional. Body of post
             autopost -- Optional. 0 or 1.
@@ -95,7 +95,7 @@ METHODS = {
             
             Keyword arguments:
             post_id -- Id of the post to update.
-            media -- Optional. File data for single file or a list of files. Will append to post.
+            media -- Optional. File object for single file or a list of file objects. Will append to post.
             title -- Optional. Title of post. Will update post if present.
             body -- Optional. Body of post. Will update post if present.
             
@@ -153,12 +153,13 @@ METHODS = {
                 ('sourceLink', str, ['optional']),            
             ],
             'auth_required':False,
+            'returns':['force_primative',],
             '__doc__':"""Post text and files on Posterous using Twitter credentials.
             
             Keyword arguments:
             username -- Twitter username
             password -- Twitter password
-            media -- Optional. File data for single file or a list of files.
+            media -- Optional. File object for single file or a list of file objects.
             message -- Optional. Title of post
             body -- Optional. Body of post
             source -- Optional. The name of your application or website
@@ -178,13 +179,14 @@ METHODS = {
                 ('sourceLink', str, ['optional']),            
             ],
             'auth_required':False,
+            'returns':['force_primative',],
             '__doc__':"""Post text and files on Posterous using Twitter 
             credentials and then tweet a message with a link to the post.
             
             Keyword arguments:
             username -- Twitter username
             password -- Twitter password
-            media -- Optional. File data for single file or a list of files.
+            media -- Optional. File object for single file or a list of file objects.
             message -- Optional. Title of post
             body -- Optional. Body of post
             source -- Optional. The name of your application or website
