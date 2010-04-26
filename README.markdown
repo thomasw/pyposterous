@@ -1,6 +1,81 @@
-Pyposterous is an API wrapper for Posterous (http://posterous.com/api) written
-in Python.
+# Pyposterous
+Pyposterous is a wrapper for the [Posterous API](http://posterous.com/api) written in Python.
 
-It's not really useful just yet though. Check out Pyposterous's big brother
-http://github.com/nureineide/posterous-python if you're looking for something
-you can use today.
+Currently (4/26/2010), Pyposterous has 100% API coverage.
+
+## Install
+
+You can install Pyposterous with setuptools:
+
+    > git clone git://github.com/thomasw/pyposterous.git
+    > cd pyposterous
+    > sudo python setup.py install
+
+Alternatively, just put the pyposterous subdirectory of this repo somewhere on your Python path. If you do it this way, you may also need to grab:
+
+* [urllib2_file](http://github.com/seisen/urllib2_file)
+* [ElementTree](http://effbot.org/zone/element-index.htm) (included in Python >2.5)
+
+## Usage
+    import pyposterous
+
+    # For calls that don't require authentication, you can use the module's
+    # API instance:
+    post = pyposterous.api.get_post(id='dJ6w')
+    print "\"%s\" has been viewed %s times" % (post.title, post.views)
+
+    # pyposttest is the posterous site I used for testing.
+    for post in pyposterous.api.read_posts(hostname='pyposttest', num_posts=2):
+        print "--------------------"
+        print "%s - %s" % (post.title, post.url)
+        if post.commentsenabled:
+            print "%s comment(s)" % post.commentscount
+
+        try:
+            if post.media:
+                print "\nMedia:"
+            for media in post.media:
+                print "* %s" % media.medium.url
+        except AttributeError:
+            pass # No media
+
+        try:
+            if post.comments:
+                print "\nComments:"
+            for comment in post.comments:
+                print "* \"%s\" by %s" % (comment.body, comment.author)
+        except AttributeError:
+            pass # No comments
+    print "--------------------"
+    
+Methods that require authentication will throw an exception.
+
+    try:
+        pyposterous.api.get_sites()
+    except pyposterous.error.PyposterousError, e:
+        print e
+
+You'll need to instantiate your own api object to specify a username and password.
+
+    api = pyposterous.API(username='username', password='password')
+
+    sites = api.get_sites()
+    print [site.__dict__ for site in sites] 
+
+    tags = sites[0].get_tags()
+    print [str(tag) for tag in tags]
+
+    for post in site.read_posts(tag=tags[0]):
+        post.new_comment(body="This article is tagged with %s. How neat." % tags[0])
+        
+Additional documentation coming as soon as I figure out how to use Sphinx.
+        
+## Everything else
+If you'd like to hire me, check out the [Match Strike](http://matchstrike.net/) site.
+
+I looked to [Tweepy](http://github.com/joshthecoder/tweepy) a lot while writing this library. If you're working on something that needs to talk to Twitter, give it a go. You'll love it.
+
+[urllib2_file](http://github.com/seisen/urllib2_file) saved me a lot of time and trouble. Kudos to the [seisen](http://github.com/seisen).
+
+Copyright (c) 2010 [Thomas Welfley](http://cyproject.net/). See [LICENSE](http://github.com/thomasw/pyposterous/blob/master/LICENSE) for details.
+    
