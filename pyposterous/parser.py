@@ -24,6 +24,20 @@ class Parser(object):
         
         
     def parse(self):
+        # This is to handle the twitter api calls specifically.
+        if 'force_primative' in self.return_conf:
+            self.output = {}
+            for x in self.xml.getroot().getchildren():
+                if x.tag != 'err':
+                    self.output[x.tag.lower()] = x.text 
+            if self.output:
+                return self.output
+            else:
+                # if self.output is empty, then an error occured and we'll
+                # just let it continue on to the code below for it to be
+                # caught and thrown.
+                self.output = []          
+        
         for element in self.xml.getroot().getchildren():
             obj = self.build_object(element)
             if obj:
@@ -43,8 +57,7 @@ class Parser(object):
                     if type(obj) == type(self.output[-1]):
                         self.output.append(obj)
                     else:
-                        attrib = "%ss" % (obj.__class__.__name__,)
-                        attrib = attrib.lower()
+                        attrib = obj.__class__.__name__.lower()
                         
                         existing = getattr(self.output[-1], attrib, None)                        
                         if existing and type(existing) == list:
@@ -59,6 +72,7 @@ class Parser(object):
                     # There was no previous element!
                     self.output.append(obj)
         
+        self.output = self.clean_up(self.output)
         output = self.output
         
         if len(self.output) == 1 and 'force_list' not in self.return_conf:
@@ -105,11 +119,14 @@ class Parser(object):
             prop_tag = prop.tag.lower()
             if element_map.get(prop_tag):
                 # If the element is one of our base types, we need to create
-                # an object of it. This should only happen for media assets, so
-                # we force it to be a list.
-                if not hasattr(obj, prop_tag):
-                    setattr(obj, prop_tag, [self.build_object(prop),])
+                # an object of it.
+                existing = getattr(obj, prop_tag, None)
+                if not existing:
+                    setattr(obj, prop_tag, self.build_object(prop),)
+                elif type(existing) == list:
+                    getattr(obj, prop_tag).append(self.build_object(prop))
                 else:
+                    setattr(obj, prop_tag, [existing,])
                     getattr(obj, prop_tag).append(self.build_object(prop))
             else:
                 # Base case - set a property called prop.tag in obj
@@ -117,6 +134,37 @@ class Parser(object):
         
         return obj
     
+    def clean_up(self, obj):
+        """Preforms some miscellaneous cleanup for attribute names that
+        aren't quite right."""
+
+        def clean_it(obj):
+            # Rename comment list to 'comments' and force it to be a list.
+            try:
+                if obj.comment:
+                    obj.comments = obj.comment
+                    del obj.comment
+                if not type(obj.comments) == list:
+                    obj.comments = [obj.comments,]
+            except AttributeError:
+                pass
+        
+            # Force media to be a list.
+            try:
+                if not type(obj.media) == list:
+                    obj.media = [obj.media,]
+            except AttributeError:
+                pass
+            return obj
+        
+        
+        if type(obj) == list:
+            obj = [clean_it(x) for x in obj]
+        else:
+            obj = clean_it(obj)
+        
+        return obj
+                    
     def build_error(self, element):
         """Throws a PyposterousError based on the element specified.
         """
