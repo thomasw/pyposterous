@@ -78,14 +78,14 @@ def build_method(**conf):
             Returns True if succesful, throws a TypeError if not.
             """
             # Check to make sure that value is the right type.
-            if value and type(value) not in p_type:
+            if value and not isinstance(value, p_type):
                 raise TypeError("The value passed for '%s' is not valid. '%s' must be one of these: %s" % (name, name, p_type,))
             
             # If the value was something iterable, we need to make sure the
             # elements are of the appropriate type - no nested lists allowed.
             if type(value) is list:
                 for a_value in value:
-                    if type(a_value) not in p_type or type(a_value) is list:
+                    if not isinstance(a_value, p_type) or type(a_value) is list:
                         raise TypeError("One of the values passed for '%s' is not valid. All values in '%s' must be one of these: %s" % (name, name, p_type))
             return True
         

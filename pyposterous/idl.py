@@ -19,10 +19,10 @@ METHODS = {
             'path':'/api/readposts',
             'parameters':[
                 ('site_id', int, ['optional']),
-                ('hostname', str, ['optional']),
+                ('hostname', basestring, ['optional']),
                 ('num_posts', int, ['optional']),
                 ('page', int, ['optional']),
-                ('tag', (str, Tag), ['optional'])],
+                ('tag', (basestring, Tag), ['optional'])],
             'auth_required':False,
             'returns': ['force_list',],
             '__doc__':"""Returns a list of posts based on the specified 
@@ -41,7 +41,7 @@ METHODS = {
             'path':'/api/gettags',
             'parameters':[
                 ('site_id', int, ['optional']),
-                ('hostname', str, ['optional'])],
+                ('hostname', basestring, ['optional'])],
             'auth_required':False,
             'returns': ['force_list',],
             '__doc__':"""Returns a list of tags based on the specified 
@@ -58,14 +58,14 @@ METHODS = {
             'parameters':[
                 ('site_id', int, ['optional']),
                 ('media', (file, list), ['optional']),
-                ('title', str, ['optional']),
-                ('body', str, ['optional']),
+                ('title', basestring, ['optional']),
+                ('body', basestring, ['optional']),
                 ('autopost', bool, ['optional']),
                 ('private', bool, ['optional']),
                 ('date', datetime, ['optional']),
-                ('tags', str, ['optional']),
-                ('source', str, ['optional']),
-                ('sourceLink', str, ['optional']),
+                ('tags', basestring, ['optional']),
+                ('source', basestring, ['optional']),
+                ('sourceLink', basestring, ['optional']),
             ],
             'auth_required':True,
             '__doc__':"""Creates a new post.
@@ -89,8 +89,8 @@ METHODS = {
             'parameters':[
                 ('post_id', int, []),
                 ('media', (file, list), ['optional']),
-                ('title', str, ['optional']),
-                ('body', str, ['optional']),
+                ('title', basestring, ['optional']),
+                ('body', basestring, ['optional']),
             ],
             'auth_required':True,
             '__doc__':"""Updates an existing post.
@@ -107,9 +107,9 @@ METHODS = {
             'path':'/api/newcomment',
             'parameters':[
                 ('post_id', int, []),
-                ('comment', str, []),
-                ('name', str, ['optional']),
-                ('email', str, ['optional']),
+                ('comment', basestring, []),
+                ('name', basestring, ['optional']),
+                ('email', basestring, ['optional']),
                 ('date', datetime, ['optional']),
             ],
             'auth_required':True,
@@ -130,7 +130,7 @@ METHODS = {
         'get_post':{
             'path':'/api/getpost',
             'parameters':[
-                ('id', str, []),
+                ('id', basestring, []),
             ],
             'auth_required':False,
             '__doc__':"""Retrieve a post object based on a http://post.ly shortcode
@@ -146,13 +146,13 @@ METHODS = {
         'upload':{
             'path':'/api/upload',
             'parameters':[
-                ('username', str, []),
-                ('password', str, []),
+                ('username', basestring, []),
+                ('password', basestring, []),
                 ('media', (file, list), ['optional']),
-                ('message', str, ['optional']),
-                ('body', str, ['optional']),
-                ('source', str, ['optional']),
-                ('sourceLink', str, ['optional']),            
+                ('message', basestring, ['optional']),
+                ('body', basestring, ['optional']),
+                ('source', basestring, ['optional']),
+                ('sourceLink', basestring, ['optional']),            
             ],
             'auth_required':False,
             'returns':['force_primative',],
@@ -172,13 +172,13 @@ METHODS = {
         'upload_and_post':{
             'path':'/api/uploadAndPost',
             'parameters':[
-                ('username', str, []),
-                ('password', str, []),
+                ('username', basestring, []),
+                ('password', basestring, []),
                 ('media', (file, list), ['optional']),
-                ('message', str, ['optional']),
-                ('body', str, ['optional']),
-                ('source', str, ['optional']),
-                ('sourceLink', str, ['optional']),            
+                ('message', basestring, ['optional']),
+                ('body', basestring, ['optional']),
+                ('source', basestring, ['optional']),
+                ('sourceLink', basestring, ['optional']),            
             ],
             'auth_required':False,
             'returns':['force_primative',],
@@ -202,9 +202,9 @@ METHODS = {
         'test':{
             'path':'TEST',
             'parameters':[
-                ('id', str, []),
+                ('id', basestring, []),
                 ('test', int, []),
-                ('test1', (str, list), ['optional']),         
+                ('test1', (basestring, list), ['optional']),         
             ],
             'auth_required':False,
             '__doc__':"Not a real API call. Only used by the unit tests.",
@@ -219,7 +219,7 @@ METHODS = {
             'path':'TEST',
             'parameters':[
                 ('id', int, ['optional']),
-                ('test', str, ['optional']),
+                ('test', basestring, ['optional']),
             ],
             'auth_required':False,
             '__doc__':"Not a real API call. Only used by the unit tests.",

@@ -54,7 +54,7 @@ class PyposterousAPITests(unittest.TestCase):
         try:
             self.api.test(id=1)
         except TypeError, e:
-            if not "%s" % e == "The value passed for 'id' is not valid. 'id' must be one of these: (<type 'str'>,)":
+            if not "%s" % e == "The value passed for 'id' is not valid. 'id' must be one of these: (<type 'basestring'>,)":
                 raise
         else:
             fail("Expected a TypeError")
@@ -82,7 +82,7 @@ class PyposterousAPITests(unittest.TestCase):
         try:
             self.api.test('asdf', 1, ['asdf', 1, 'asdf'],)
         except TypeError, e:
-            if not "%s" % e == "One of the values passed for 'test1' is not valid. All values in 'test1' must be one of these: (<type 'str'>, <type 'list'>)":
+            if not "%s" % e == "One of the values passed for 'test1' is not valid. All values in 'test1' must be one of these: (<type 'basestring'>, <type 'list'>)":
                 raise
         else:
             fail("Expected a TypeError")
