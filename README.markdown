@@ -67,8 +67,15 @@ You'll need to instantiate your own api object to specify a username and passwor
 
     for post in site.read_posts(tag=tags[0]):
         post.new_comment(body="This article is tagged with %s. How neat." % tags[0])
-        
-Additional documentation coming as soon as I figure out how to use Sphinx.
+
+The read\_posts results are paginated, meaning that only **num_posts** results are returned per page. That can make things tricky when you're trying to iterate over large result sets. To make it easier, you can use the Cursor class. Here's an example:
+
+    for post in pyposterous.Cursor(method=api.read_posts, limit=50, start_page=4, parameters={'hostname':'pyposttest'}):
+        print "%s -- %s" % (post.title, post.url)
+
+The cursor object will retrieve additional pages of results as they're needed.
+
+Additional documentation coming soon.
         
 ## Everything else
 If you'd like to hire me, check out the [Match Strike](http://matchstrike.net/) site.
