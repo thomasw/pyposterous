@@ -2,7 +2,7 @@ import types
 import time
 import unittest
 
-from pyposterous import API
+from pyposterous import API, Cursor
 from pyposterous.error import PyposterousError
 from pyposterous.idl import METHODS
 
@@ -250,6 +250,24 @@ class PyposterousAPITests(unittest.TestCase):
         #self.assertEqual(post2.body, body)
         self.assertEqual(len(post1.media), len(post2.media))
         self.assertEqual(len(post2.media), len(images))
+    
+    def test_cursor(self):
+        results = []
+        limit = 40
+        for post in Cursor(method=self.api.read_posts, start_page=5, num_posts=10, limit=limit, parameters={'hostname':name_of_first_blog,}):
+            results.append("%s -- %s" % (post.title, post.url))
+        
+        #print results
+        
+        # This should return limit posts
+        self.assertEqual(limit, len(results))
+        
+        # self.api.get_sites does not support pagination
+        self.assertRaises(PyposterousError, Cursor, {'method':self.api.get_sites})
+        
+        # You can't pass page or num_posts as parameters
+        self.assertRaises(PyposterousError, Cursor, {'method':self.api.read_posts, 'parameters':{'hostname':name_of_first_blog,'page':4},})
+        self.assertRaises(PyposterousError, Cursor, {'method':self.api.read_posts, 'parameters':{'hostname':name_of_first_blog,'num_posts':4},})
             
 if __name__ == '__main__':
     unittest.main()

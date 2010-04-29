@@ -154,4 +154,9 @@ def build_method(**conf):
         return method.execute()
     _method.__doc__ = docstring_trim(conf.get('__doc__'))
     
+    for param, types, config in conf.get('parameters', []):
+        if 'page' == param:
+            _method.pagination = True
+            break
+    
     return _method
