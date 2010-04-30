@@ -11,32 +11,44 @@ class PosterousData(object):
 class Site(PosterousData):    
     def get_tags(self):
         """Returns the tags for this site using self.id first and self.hostname
-        second. If neither is specified, a PosterousError is raised."""
+        second. If neither is specified, a PosterousError is raised.
+        
+        """
         try:
             return self.api().get_tags(site_id=self.id)
         except AttributeError:
             try:
                 return self.api().get_tags(hostname=self.hostname)
             except AttributeError:
-                raise PyposterousError('No ID or hostname has been specified for this site object.')
+                raise PyposterousError('No ID or hostname attributes have been defined for this site instance.')
                 
     def read_posts(self, num_posts=None, page=None, tag=None):
-        """Returns a list of posts for this site using self.id."""
+        """Returns a list of posts for this site using self.id or self.hostname.
+        If niether is specified a PyposterousError is raised.
+        
+        See pyposterous.API.read_posts for parameter documentation.
+        
+        """
         try:
             return self.api().read_posts(site_id=self.id, num_posts=num_posts, page=page, tag=tag)
         except AttributeError:
             try:
                 return self.api().read_posts(hostname=self.hostname, num_posts=num_posts, page=page, tag=tag)
             except AttributeError:
-                raise PyposterousError('No ID or hostname has been specified for this site object.')
+                raise PyposterousError('No ID or hostname attributes have been defined for this site instance.')
             
     
     def new_post(self, media=None, title=None, body=None, autopost=None, private=None, date=None, tags=None, source=None, sourceLink=None):
-        """Posts a new blog post to this site using self.id"""
+        """Posts a new blog post to this site using self.id. If self.id isn't
+        specified, a PyposterousError is raised.
+        
+        See pyposterous.API.new_post for parameter documentation.
+        
+        """
         try:
             return self.api().new_post(self.id, media, title, body, autopost, private, date, tags, source, sourceLink)
         except AttributeError:
-            raise PyposterousError('No ID has been specified for this site object.')
+            raise PyposterousError('No id attribute defined for this site instance.')
 
 class Tag(PosterousData):
     def __str__(self):
@@ -48,15 +60,17 @@ class Tag(PosterousData):
 class Post(PosterousData):
     def update_post(self, media=None):
         """Updates the post this object represents based on the values of 
-        post_id, title, and body.
+        self.id, self.title, and self.body. If self.id isn't specified, a
+        PyposterousError is raised.
         
         media -- a file or a list of files to APPEND to the existing post.
+        
         """
         kwargs = {}
         try:
             kwargs['post_id'] = self.id
         except:
-            raise PyposterousError('No post_id specified for this Post object.')
+            raise PyposterousError('No id attribute defined for this post instance.')
         
         try:
             kwargs['title'] = self.title
@@ -73,7 +87,21 @@ class Post(PosterousData):
         return self.api().update_post(**kwargs)
         
     def new_comment(self, body, name=None, email=None, date=None):
+        """Posts a new comment to this post using the value of self.id. If self.id
+        isn't specified, a PyposterousError is raised.
+        
+        This method is compatible with the Cursor class.
+        
+        See pyposterous.API.new_comment for parameter documentation.
+        
+        """
+        try:
+            self.id
+        except AttributeError:
+            raise PyposterousError('No id attribute defined for this post instance.')
+            
         return self.api().new_comment(self.id, body, name, email, date)
+    new_comment.pagination=True
 
 class Comment(PosterousData):
     pass

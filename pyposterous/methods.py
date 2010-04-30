@@ -1,4 +1,3 @@
-import urllib2_file
 import urllib2
 from datetime import datetime
 
@@ -126,6 +125,7 @@ def build_method(**conf):
             self.args.append((name, value,))
         
         def execute(self):
+            import urllib2_file
             # Anything with TEST in the URL is a test function, not a real API
             # call
             if 'TEST' in self.url:

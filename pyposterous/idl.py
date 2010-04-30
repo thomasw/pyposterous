@@ -11,8 +11,9 @@ METHODS = {
             'parameters':(),
             'auth_required':True,
             'returns': ['force_list',],
-            '__doc__':"""Returns a list of all sites owned and authored by
-            this user.
+            '__doc__':"""Returns a list of site objects representing the sites
+            owned and authored by this user.
+            
             """
         },
         'read_posts': {
@@ -25,15 +26,16 @@ METHODS = {
                 ('tag', (basestring, Tag), ['optional'])],
             'auth_required':False,
             'returns': ['force_list',],
-            '__doc__':"""Returns a list of posts based on the specified 
+            '__doc__':"""Returns a list of post objects based on the specified 
             parameters.
             
             Keyword arguments:
-            site_id -- Optional. Id of the site to read from
-            hostname -- Optional. Subdomain of the site to read from
-            num_posts -- Optional. How many posts you want. Default is 10, max is 50
-            page -- Optional. What 'page' you want (based on num_posts). Default is 1
-            tag -- Optional
+            
+            * site_id -- Optional. Id of the site to read from
+            * hostname -- Optional. Subdomain of the site to read from
+            * num_posts -- Optional. How many posts you want. Default is 10, max is 50
+            * page -- Optional. What 'page' you want (based on num_posts). Default is 1
+            * tag -- Optional
             
             """
         },
@@ -44,12 +46,13 @@ METHODS = {
                 ('hostname', basestring, ['optional'])],
             'auth_required':False,
             'returns': ['force_list',],
-            '__doc__':"""Returns a list of tags based on the specified 
+            '__doc__':"""Returns a list of tags objects on the specified 
             site.
             
             Keyword arguments:
-            site_id -- Optional. Id of the site to read from
-            hostname -- Optional. Subdomain of the site to read from
+            
+            * site_id -- Optional. Id of the site to read from
+            * hostname -- Optional. Subdomain of the site to read from
             
             """
         },
@@ -68,19 +71,21 @@ METHODS = {
                 ('sourceLink', basestring, ['optional']),
             ],
             'auth_required':True,
-            '__doc__':"""Creates a new post.
+            '__doc__':"""Creates a new post. Returns a post object representing
+            that post.
             
             Keyword arguments:
-            site_id -- Optional. Id of the site to post to. If not supplied, posts to the user's default site
-            media -- Optional. File object for single file or a list of file objects.
-            title -- Optional. Title of post
-            body -- Optional. Body of post
-            autopost -- Optional. 0 or 1.
-            private -- Optional. 0 or 1.
-            date -- Optional. In GMT. Any parsable format. Cannot be in the future.
-            tags -- Optional. Comma separate tags
-            source -- Optional. The name of your application or website
-            sourceLink -- Optional. Link to your application or website
+            
+            * site_id -- Optional. Id of the site to post to. If not supplied, posts to the user's default site
+            * media -- Optional. File object for single file or a list of file objects.
+            * title -- Optional. Title of post
+            * body -- Optional. Body of post
+            * autopost -- Optional. 0 or 1.
+            * private -- Optional. 0 or 1.
+            * date -- Optional. In GMT. Any parsable format. Cannot be in the future.
+            * tags -- Optional. Comma separate tags
+            * source -- Optional. The name of your application or website
+            * sourceLink -- Optional. Link to your application or website
                    
             """
         },
@@ -93,13 +98,15 @@ METHODS = {
                 ('body', basestring, ['optional']),
             ],
             'auth_required':True,
-            '__doc__':"""Updates an existing post.
+            '__doc__':"""Updates an existing post. Returns a post object for
+            the updated post.
             
             Keyword arguments:
-            post_id -- Id of the post to update.
-            media -- Optional. File object for single file or a list of file objects. Will append to post.
-            title -- Optional. Title of post. Will update post if present.
-            body -- Optional. Body of post. Will update post if present.
+            
+            * post_id -- Id of the post to update.
+            * media -- Optional. File object for single file or a list of file objects. Will append to post.
+            * title -- Optional. Title of post. Will update post if present.
+            * body -- Optional. Body of post. Will update post if present.
             
             """
         },
@@ -113,14 +120,16 @@ METHODS = {
                 ('date', datetime, ['optional']),
             ],
             'auth_required':True,
-            '__doc__':"""Adds a comment to the specified post.
+            '__doc__':"""Adds a comment to the specified post. Returns a comment
+            object with the parent post as an attribute.
             
             Keyword arguments:
-            post_id -- The post id to comment on
-            comment -- The comment body
-            name -- Optional. The name to use
-            email -- Optional. The email address to use
-            date -- Optional. In GMT. Any parsable format. Cannot be in the future.
+            
+            * post_id -- The post id to comment on
+            * comment -- The comment body
+            * name -- Optional. The name to use
+            * email -- Optional. The email address to use
+            * date -- Optional. In GMT. Any parsable format. Cannot be in the future.
             
             """
         },
@@ -157,15 +166,17 @@ METHODS = {
             'auth_required':False,
             'returns':['force_primative',],
             '__doc__':"""Post text and files on Posterous using Twitter credentials.
+            Returns a dictionary containing mediaid and mediaurl.
             
             Keyword arguments:
-            username -- Twitter username
-            password -- Twitter password
-            media -- Optional. File object for single file or a list of file objects.
-            message -- Optional. Title of post
-            body -- Optional. Body of post
-            source -- Optional. The name of your application or website
-            sourceLink -- Optional. Link to your application or website            
+            
+            * username -- Twitter username
+            * password -- Twitter password
+            * media -- Optional. File object for single file or a list of file objects.
+            * message -- Optional. Title of post
+            * body -- Optional. Body of post
+            * source -- Optional. The name of your application or website
+            * sourceLink -- Optional. Link to your application or website            
             
             """   
         },
@@ -183,16 +194,18 @@ METHODS = {
             'auth_required':False,
             'returns':['force_primative',],
             '__doc__':"""Post text and files on Posterous using Twitter 
-            credentials and then tweet a message with a link to the post.
+            credentials and then tweet a message with a link to the post. Returns
+            a dictionary containing mediaid and mediaurl.
             
             Keyword arguments:
-            username -- Twitter username
-            password -- Twitter password
-            media -- Optional. File object for single file or a list of file objects.
-            message -- Optional. Title of post
-            body -- Optional. Body of post
-            source -- Optional. The name of your application or website
-            sourceLink -- Optional. Link to your application or website            
+            
+            * username -- Twitter username
+            * password -- Twitter password
+            * media -- Optional. File object for single file or a list of file objects.
+            * message -- Optional. Title of post
+            * body -- Optional. Body of post
+            * source -- Optional. The name of your application or website
+            * sourceLink -- Optional. Link to your application or website            
             
             """        
         },

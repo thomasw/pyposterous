@@ -4,13 +4,14 @@ class Cursor(object):
     """Allows for iterating over multiple pages of Posterous results.
     
     Keyword arguments:
-    method -- The method with paginated results
-    num_posts -- (Optional) The number of posts to request from posterous per page
-    start_page -- (Optional) The page to start on.
-    limit -- (Optional) Only return LIMIT results.
-    parameters -- (Optional) parameters you'd like to pass to the specified method
-    """
     
+    * method -- The method with paginated results
+    * num_posts -- (Optional) The number of posts to request from posterous per page
+    * start_page -- (Optional) The page to start on.
+    * limit -- (Optional) Only return LIMIT results.
+    * parameters -- (Optional) parameters you'd like to pass to the specified method
+    
+    """
     def __init__(self, method, num_posts=20, start_page=1, limit=0, parameters={}):
         # pagination will be equal to true if this method supports it
         if not getattr(method, 'pagination', False):
