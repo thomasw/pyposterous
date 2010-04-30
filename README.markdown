@@ -17,6 +17,9 @@ Alternatively, just put the pyposterous subdirectory of this repo somewhere on y
 * [ElementTree](http://effbot.org/zone/element-index.htm) (included in Python >2.5)
 
 ## Usage
+
+Visit the [Pyposterous documentation](http://thomasw.github.com/pyposterous/) site for additional information.
+
     import pyposterous
 
     # For calls that don't require authentication, you can use the module's
@@ -74,9 +77,7 @@ The read\_posts results are paginated, meaning that only **num_posts** results a
         print "%s -- %s" % (post.title, post.url)
 
 The cursor object will retrieve additional pages of results as they're needed.
-
-Additional documentation coming soon.
-        
+    
 ## Everything else
 If you'd like to hire me, check out the [Match Strike](http://matchstrike.net/) site.
 
