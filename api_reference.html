@@ -1,0 +1,369 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>API Reference &mdash; Pyposterous v0.2.1 documentation</title>
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '#',
+        VERSION:     '0.2.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="top" title="Pyposterous v0.2.1 documentation" href="index.html" />
+    <link rel="prev" title="Using Pyposterous" href="tutorial.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="tutorial.html" title="Using Pyposterous"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Pyposterous v0.2.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="api-reference">
+<span id="id1"></span><h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="base-methods">
+<h2>Base Methods<a class="headerlink" href="#base-methods" title="Permalink to this headline">¶</a></h2>
+<p>These methods represent the base Posterous methods documented on the <a class="reference external" href="http://posterous.com/api">Posterous API site</a>.</p>
+<div class="section" id="reading">
+<h3>Reading<a class="headerlink" href="#reading" title="Permalink to this headline">¶</a></h3>
+<p>Methods for reading data from Posterous.com. See <a class="reference external" href="http://posterous.com/api/reading">http://posterous.com/api/reading</a> for more information.</p>
+<span class="target" id="get-sites-method"></span><dl class="classmethod">
+<dt id="pyposterous.api.get_sites">
+<em class="property">classmethod </em><tt class="descclassname">api.</tt><tt class="descname">get_sites</tt><big>(</big><em>api</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#pyposterous.api.get_sites" title="Permalink to this definition">¶</a></dt>
+<dd>Returns a list of site objects representing the sites
+owned and authored by this user.</dd></dl>
+
+<span class="target" id="get-tags-method"></span><dl class="classmethod">
+<dt id="pyposterous.api.get_tags">
+<em class="property">classmethod </em><tt class="descclassname">api.</tt><tt class="descname">get_tags</tt><big>(</big><em>api</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#pyposterous.api.get_tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of tags objects on the specified
+site.</p>
+<p>Keyword arguments:</p>
+<ul class="simple">
+<li>site_id &#8211; Optional. Id of the site to read from</li>
+<li>hostname &#8211; Optional. Subdomain of the site to read from</li>
+</ul>
+</dd></dl>
+
+<span class="target" id="read-posts-method"></span><dl class="classmethod">
+<dt id="pyposterous.api.read_posts">
+<em class="property">classmethod </em><tt class="descclassname">api.</tt><tt class="descname">read_posts</tt><big>(</big><em>api</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#pyposterous.api.read_posts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of post objects based on the specified
+parameters.</p>
+<p>Keyword arguments:</p>
+<ul class="simple">
+<li>site_id &#8211; Optional. Id of the site to read from</li>
+<li>hostname &#8211; Optional. Subdomain of the site to read from</li>
+<li>num_posts &#8211; Optional. How many posts you want. Default is 10, max is 50</li>
+<li>page &#8211; Optional. What &#8216;page&#8217; you want (based on num_posts). Default is 1</li>
+<li>tag &#8211; Optional</li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="writing">
+<h3>Writing<a class="headerlink" href="#writing" title="Permalink to this headline">¶</a></h3>
+<p>Methods that allow posting or commenting. See <a class="reference external" href="http://posterous.com/api/posting">http://posterous.com/api/posting</a> for more information.</p>
+<span class="target" id="new-post-method"></span><dl class="classmethod">
+<dt id="pyposterous.api.new_post">
+<em class="property">classmethod </em><tt class="descclassname">api.</tt><tt class="descname">new_post</tt><big>(</big><em>api</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#pyposterous.api.new_post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new post. Returns a post object representing
+that post.</p>
+<p>Keyword arguments:</p>
+<ul class="simple">
+<li>site_id &#8211; Optional. Id of the site to post to. If not supplied, posts to the user&#8217;s default site</li>
+<li>media &#8211; Optional. File object for single file or a list of file objects.</li>
+<li>title &#8211; Optional. Title of post</li>
+<li>body &#8211; Optional. Body of post</li>
+<li>autopost &#8211; Optional. 0 or 1.</li>
+<li>private &#8211; Optional. 0 or 1.</li>
+<li>date &#8211; Optional. In GMT. Any parsable format. Cannot be in the future.</li>
+<li>tags &#8211; Optional. Comma separate tags</li>
+<li>source &#8211; Optional. The name of your application or website</li>
+<li>sourceLink &#8211; Optional. Link to your application or website</li>
+</ul>
+</dd></dl>
+
+<span class="target" id="update-post-method"></span><dl class="classmethod">
+<dt id="pyposterous.api.update_post">
+<em class="property">classmethod </em><tt class="descclassname">api.</tt><tt class="descname">update_post</tt><big>(</big><em>api</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#pyposterous.api.update_post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates an existing post. Returns a post object for
+the updated post.</p>
+<p>Keyword arguments:</p>
+<ul class="simple">
+<li>post_id &#8211; Id of the post to update.</li>
+<li>media &#8211; Optional. File object for single file or a list of file objects. Will append to post.</li>
+<li>title &#8211; Optional. Title of post. Will update post if present.</li>
+<li>body &#8211; Optional. Body of post. Will update post if present.</li>
+</ul>
+</dd></dl>
+
+<span class="target" id="new-comment-method"></span><dl class="classmethod">
+<dt id="pyposterous.api.new_comment">
+<em class="property">classmethod </em><tt class="descclassname">api.</tt><tt class="descname">new_comment</tt><big>(</big><em>api</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#pyposterous.api.new_comment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a comment to the specified post. Returns a comment
+object with the parent post as an attribute.</p>
+<p>Keyword arguments:</p>
+<ul class="simple">
+<li>post_id &#8211; The post id to comment on</li>
+<li>comment &#8211; The comment body</li>
+<li>name &#8211; Optional. The name to use</li>
+<li>email &#8211; Optional. The email address to use</li>
+<li>date &#8211; Optional. In GMT. Any parsable format. Cannot be in the future.</li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="post-ly">
+<h3>Post.ly<a class="headerlink" href="#post-ly" title="Permalink to this headline">¶</a></h3>
+<p>Post.ly methods. See <a class="reference external" href="http://posterous.com/api/postly">http://posterous.com/api/postly</a> for more information.</p>
+<span class="target" id="get-post-method"></span><dl class="classmethod">
+<dt id="pyposterous.api.get_post">
+<em class="property">classmethod </em><tt class="descclassname">api.</tt><tt class="descname">get_post</tt><big>(</big><em>api</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#pyposterous.api.get_post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a post object based on a <a class="reference external" href="http://post.ly">http://post.ly</a> shortcode</p>
+<p>Keyword arguments:
+id &#8211; Post.ly shortcode. (Example: 123abc in <a class="reference external" href="http://post.ly/123abc">http://post.ly/123abc</a>)</p>
+</dd></dl>
+
+</div>
+<div class="section" id="twitter">
+<h3>Twitter<a class="headerlink" href="#twitter" title="Permalink to this headline">¶</a></h3>
+<p>Posterous&#8217; Twitter methods. See <a class="reference external" href="http://posterous.com/api/twitter">http://posterous.com/api/twitter</a> for more information.</p>
+<span class="target" id="upload-method"></span><dl class="classmethod">
+<dt id="pyposterous.api.upload">
+<em class="property">classmethod </em><tt class="descclassname">api.</tt><tt class="descname">upload</tt><big>(</big><em>api</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#pyposterous.api.upload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Post text and files on Posterous using Twitter credentials.
+Returns a dictionary containing mediaid and mediaurl.</p>
+<p>Keyword arguments:</p>
+<ul class="simple">
+<li>username &#8211; Twitter username</li>
+<li>password &#8211; Twitter password</li>
+<li>media &#8211; Optional. File object for single file or a list of file objects.</li>
+<li>message &#8211; Optional. Title of post</li>
+<li>body &#8211; Optional. Body of post</li>
+<li>source &#8211; Optional. The name of your application or website</li>
+<li>sourceLink &#8211; Optional. Link to your application or website</li>
+</ul>
+</dd></dl>
+
+<span class="target" id="upload-and-post-method"></span><dl class="classmethod">
+<dt id="pyposterous.api.upload_and_post">
+<em class="property">classmethod </em><tt class="descclassname">api.</tt><tt class="descname">upload_and_post</tt><big>(</big><em>api</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#pyposterous.api.upload_and_post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Post text and files on Posterous using Twitter
+credentials and then tweet a message with a link to the post. Returns
+a dictionary containing mediaid and mediaurl.</p>
+<p>Keyword arguments:</p>
+<ul class="simple">
+<li>username &#8211; Twitter username</li>
+<li>password &#8211; Twitter password</li>
+<li>media &#8211; Optional. File object for single file or a list of file objects.</li>
+<li>message &#8211; Optional. Title of post</li>
+<li>body &#8211; Optional. Body of post</li>
+<li>source &#8211; Optional. The name of your application or website</li>
+<li>sourceLink &#8211; Optional. Link to your application or website</li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="data-classes-and-helper-methods">
+<h2>Data Classes and Helper Methods<a class="headerlink" href="#data-classes-and-helper-methods" title="Permalink to this headline">¶</a></h2>
+<p id="helper-functions">Instances of the following classes are instantiated based on the data returned by Posterous. Due to inconsistencies in the Posterous API, instance attributes will vary depending on the API call that created the instance. Use <a class="reference external" href="http://posterous.com/api">Posterous&#8217;s docs</a> as an attribute reference.</p>
+<p>Many of the classes include helper functions that make working with Pyposterous cleaner than solely relying on the Base API methods. You should use the helper methods below whenever possible.</p>
+<span class="target" id="post-class"></span><dl class="class">
+<dt id="pyposterous.models.Post">
+<em class="property">class </em><tt class="descclassname">pyposterous.models.</tt><tt class="descname">Post</tt><big>(</big><em>api</em><big>)</big><a class="headerlink" href="#pyposterous.models.Post" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="pyposterous.models.Post.new_comment">
+<tt class="descname">new_comment</tt><big>(</big><em>body</em>, <em>name=None</em>, <em>email=None</em>, <em>date=None</em><big>)</big><a class="headerlink" href="#pyposterous.models.Post.new_comment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Posts a new comment to this post using the value of self.id. If self.id
+isn&#8217;t specified, a PyposterousError is raised.</p>
+<p>This method is compatible with the Cursor class.</p>
+<p>See pyposterous.API.new_comment for parameter documentation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyposterous.models.Post.update_post">
+<tt class="descname">update_post</tt><big>(</big><em>media=None</em><big>)</big><a class="headerlink" href="#pyposterous.models.Post.update_post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the post this object represents based on the values of 
+self.id, self.title, and self.body. If self.id isn&#8217;t specified, a
+PyposterousError is raised.</p>
+<p>media &#8211; a file or a list of files to APPEND to the existing post.</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="site-class"></span><dl class="class">
+<dt id="pyposterous.models.Site">
+<em class="property">class </em><tt class="descclassname">pyposterous.models.</tt><tt class="descname">Site</tt><big>(</big><em>api</em><big>)</big><a class="headerlink" href="#pyposterous.models.Site" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="pyposterous.models.Site.get_tags">
+<tt class="descname">get_tags</tt><big>(</big><big>)</big><a class="headerlink" href="#pyposterous.models.Site.get_tags" title="Permalink to this definition">¶</a></dt>
+<dd>Returns the tags for this site using self.id first and self.hostname
+second. If neither is specified, a PosterousError is raised.</dd></dl>
+
+<dl class="method">
+<dt id="pyposterous.models.Site.new_post">
+<tt class="descname">new_post</tt><big>(</big><em>media=None</em>, <em>title=None</em>, <em>body=None</em>, <em>autopost=None</em>, <em>private=None</em>, <em>date=None</em>, <em>tags=None</em>, <em>source=None</em>, <em>sourceLink=None</em><big>)</big><a class="headerlink" href="#pyposterous.models.Site.new_post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Posts a new blog post to this site using self.id. If self.id isn&#8217;t
+specified, a PyposterousError is raised.</p>
+<p>See pyposterous.API.new_post for parameter documentation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyposterous.models.Site.read_posts">
+<tt class="descname">read_posts</tt><big>(</big><em>num_posts=None</em>, <em>page=None</em>, <em>tag=None</em><big>)</big><a class="headerlink" href="#pyposterous.models.Site.read_posts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of posts for this site using self.id or self.hostname.
+If niether is specified a PyposterousError is raised.</p>
+<p>See pyposterous.API.read_posts for parameter documentation.</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="tag-class"></span><dl class="class">
+<dt id="pyposterous.models.Tag">
+<em class="property">class </em><tt class="descclassname">pyposterous.models.</tt><tt class="descname">Tag</tt><big>(</big><em>api</em><big>)</big><a class="headerlink" href="#pyposterous.models.Tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<span class="target" id="comment-class"></span><dl class="class">
+<dt id="pyposterous.models.Comment">
+<em class="property">class </em><tt class="descclassname">pyposterous.models.</tt><tt class="descname">Comment</tt><big>(</big><em>api</em><big>)</big><a class="headerlink" href="#pyposterous.models.Comment" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<span class="target" id="media-class"></span><dl class="class">
+<dt id="pyposterous.models.Media">
+<em class="property">class </em><tt class="descclassname">pyposterous.models.</tt><tt class="descname">Media</tt><big>(</big><em>api</em><big>)</big><a class="headerlink" href="#pyposterous.models.Media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<span class="target" id="image-class"></span><dl class="class">
+<dt id="pyposterous.models.Image">
+<em class="property">class </em><tt class="descclassname">pyposterous.models.</tt><tt class="descname">Image</tt><big>(</big><em>api</em><big>)</big><a class="headerlink" href="#pyposterous.models.Image" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="cursor">
+<h2>Cursor<a class="headerlink" href="#cursor" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="cursor-class"></span><dl class="class">
+<dt id="pyposterous.cursor.Cursor">
+<em class="property">class </em><tt class="descclassname">pyposterous.cursor.</tt><tt class="descname">Cursor</tt><big>(</big><em>method</em>, <em>num_posts=20</em>, <em>start_page=1</em>, <em>limit=0</em>, <em>parameters={}</em><big>)</big><a class="headerlink" href="#pyposterous.cursor.Cursor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows for iterating over multiple pages of Posterous results.</p>
+<p>Keyword arguments:</p>
+<ul class="simple">
+<li>method &#8211; The method with paginated results</li>
+<li>num_posts &#8211; (Optional) The number of posts to request from posterous per page</li>
+<li>start_page &#8211; (Optional) The page to start on.</li>
+<li>limit &#8211; (Optional) Only return LIMIT results.</li>
+<li>parameters &#8211; (Optional) parameters you&#8217;d like to pass to the specified method</li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="pyposterous.error.PyposterousError">
+<em class="property">exception </em><tt class="descclassname">pyposterous.error.</tt><tt class="descname">PyposterousError</tt><big>(</big><em>error</em>, <em>error_code=None</em><big>)</big><a class="headerlink" href="#pyposterous.error.PyposterousError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pyposterous exception that accepts an optional posterous error code.</p>
+<dl class="attribute">
+<dt id="PyposterousError.error_code">
+<tt class="descname">error_code</tt><a class="headerlink" href="#PyposterousError.error_code" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="PyposterousError.error_message">
+<tt class="descname">error_message</tt><a class="headerlink" href="#PyposterousError.error_message" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">API Reference</a><ul>
+<li><a class="reference external" href="#base-methods">Base Methods</a><ul>
+<li><a class="reference external" href="#reading">Reading</a></li>
+<li><a class="reference external" href="#writing">Writing</a></li>
+<li><a class="reference external" href="#post-ly">Post.ly</a></li>
+<li><a class="reference external" href="#twitter">Twitter</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#data-classes-and-helper-methods">Data Classes and Helper Methods</a></li>
+<li><a class="reference external" href="#cursor">Cursor</a></li>
+<li><a class="reference external" href="#exceptions">Exceptions</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="tutorial.html"
+                                  title="previous chapter">Using Pyposterous</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="sources/api_reference.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="tutorial.html" title="Using Pyposterous"
+             >previous</a> |</li>
+        <li><a href="index.html">Pyposterous v0.2.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Thomas Welfley.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.5.
+    </div>
+  </body>
+</html>
