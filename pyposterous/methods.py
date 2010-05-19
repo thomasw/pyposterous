@@ -126,6 +126,8 @@ def build_method(**conf):
         
         def execute(self):
             import urllib2_file
+            import base64
+            
             # Anything with TEST in the URL is a test function, not a real API
             # call
             if 'TEST' in self.url:
@@ -135,13 +137,31 @@ def build_method(**conf):
             if not self.args:
                 self.args = None
             
-            passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
-            passman.add_password(None, self.url, self.api.username, self.api.password)
-            authhandler = urllib2.HTTPBasicAuthHandler(passman)
-            opener = urllib2.build_opener(authhandler)
-            urllib2.install_opener(opener)
-
-            resource = urllib2.urlopen(self.url, self.args)
+            req = urllib2.Request(self.url)
+            if self.api.username and self.api.password:
+                base64string =  base64.encodestring('%s:%s' % (self.api.username, self.api.password))[:-1]
+                authheader =  "Basic %s" % base64string
+                req.add_header("Authorization", authheader)
+            
+            # We need to always supply the credentials because some of the
+            # posterous API auth enabled calls don't require authentication.
+            # It's just optional.
+            # In those cases urllib2's PasswordMgr just won't supply the 
+            # credentials and I can't figure how to force it to.
+            # The block above this comment forces the credentials to be provided
+            # if they are specified.
+            # TODO: Fix the code below.
+                
+            #passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
+            #passman.add_password("Posterous", 'posterous.com', self.api.username, self.api.password)
+            #authhandler = urllib2.HTTPBasicAuthHandler(passman)
+            #opener = urllib2.build_opener(authhandler)
+            #urllib2.install_opener(opener)
+            
+            try:
+                resource = urllib2.urlopen(req, self.args)
+            except urllib2.HTTPError as e:
+                resource = e
             parser = Parser(self.api, resource, self.returns)
             
             data = parser.parse()
