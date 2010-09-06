@@ -135,5 +135,6 @@ attribute_map = {
     ('views', 'filesize', 'height', 'width', 'commentscount', 'num_posts', 'size', ):int,
     ('private', 'commentsenabled', 'primary'):lambda x: x.upper() == 'TRUE',
     ('body',):lambda x: x.strip(), # Hopefully whitespace will not be significant. 
+    ('timestamp',):lambda x: parse_date(x, '%a %b %d %H:%M:%S %Y'),
     ('date',):lambda x: parse_date(x),} 
     
