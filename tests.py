@@ -102,6 +102,10 @@ class PyposterousAPITests(unittest.TestCase):
         api = API()
         self.assertRaises(PyposterousError, api.test_auth_required)
     
+    def test_method_twitter_auth_check(self):
+        api = API()
+        self.assertRaises(PyposterousError, api.test_twitter_auth_required)
+    
     def test_method_valid_calls(self):
         self.api.test('test', 1,)
         self.api.test(id='test', test=1)
