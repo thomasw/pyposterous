@@ -11,7 +11,7 @@ try:
     # override the settings in the except clause below. Use the except clause
     # as a template for your test_settings.py file
     # test_settings.py is in .gitignore, so it shouldn't be committed.
-    from test_settings import p_username, p_password, t_username, t_password, name_of_first_blog
+    from test_settings import *
 except:    
     # Posterous - Enter posterous credentials below
     p_username = 'test'
@@ -225,31 +225,24 @@ class PyposterousAPITests(unittest.TestCase):
         self.assertEqual(full_post_data.comments[0].body, comment_text1)
         self.assertEqual(full_post_data.comments[1].body, comment_text2)
         
-    def test_upload_and_uploadAndPost(self):
+    def test_upload(self):
+        from pyposterous.auth import TwitterAuth
+        
+        api = API(auth=TwitterAuth(consumer_key, consumer_secret, user_key, user_secret))
+        
         images = [open('test_assets/1.jpg'), open('test_assets/2.jpg'),]
         title = 'Check out this awesome media'
         body = 'AWESOME.'
         source = 'Pyposterous'
         sourceLink = 'http://github.com/thomasw/pyposterous'
         
-        post1 = self.api.upload(t_username, t_password, images, title, body, 
-                               source, sourceLink)
-        post2 = self.api.upload_and_post(t_username, t_password, images, title,
-                                         body, source, sourceLink)
-        for image in images:
-            image.close()
-            
-        post1 = self.api.get_post(id=post1['mediaurl'].replace('http://post.ly/', ''))
-        post2 = self.api.get_post(id=post2['mediaurl'].replace('http://post.ly/', ''))
-
-        self.assertEqual(post1.title, post2.title)
-        self.assertEqual(post1.title, title,)
-        # body will not be equal because of the markup posterous inserts
-        # for display the media.
-        #self.assertEqual(post1.body, post2.body,)
-        #self.assertEqual(post2.body, body)
-        self.assertEqual(len(post1.media), len(post2.media))
-        self.assertEqual(len(post2.media), len(images))
+        post = api.upload(images, title, body, source, sourceLink)
+        
+        retrieved = api.get_post(post.id)
+        
+        self.assertEqual(title, retrieved.title)
+        self.assertEqual(len(retrieved.media), len(images))
+        self.assertEqual(retrieved.title, post.text)
     
     def test_cursor(self):
         results = []
