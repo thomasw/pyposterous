@@ -132,7 +132,7 @@ element_map = {
 # the value
 attribute_map = {
     ('id'):lambda x: try_parse_int(x),
-    ('id', 'views', 'filesize', 'height', 'width', 'commentscount', 'num_posts',):int,
+    ('views', 'filesize', 'height', 'width', 'commentscount', 'num_posts', 'size', ):int,
     ('private', 'commentsenabled', 'primary'):lambda x: x.upper() == 'TRUE',
     ('body',):lambda x: x.strip(), # Hopefully whitespace will not be significant. 
     ('date',):lambda x: parse_date(x),} 
