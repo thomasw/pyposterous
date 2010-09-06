@@ -22,7 +22,7 @@ def build_method(**conf):
             
             # Raise an exception if authentication is required but credentials
             # are not specified
-            if self.auth_required and not (self.api.username and self.api.password):           
+            if self.auth_required and not (self.api.auth.username and self.api.auth.password):           
                 raise PyposterousError('Authentication is required to use this method.')
             
             self.url = "http://%s%s" % (self.api.host, self.path)
@@ -137,27 +137,9 @@ def build_method(**conf):
             if not self.args:
                 self.args = None
             
-            req = urllib2.Request(self.url)
-            if self.api.username and self.api.password:
-                base64string =  base64.encodestring('%s:%s' % (self.api.username, self.api.password))[:-1]
-                authheader =  "Basic %s" % base64string
-                req.add_header("Authorization", authheader)
-            
-            # We need to always supply the credentials because some of the
-            # posterous API auth enabled calls don't require authentication.
-            # It's just optional.
-            # In those cases urllib2's PasswordMgr just won't supply the 
-            # credentials and I can't figure how to force it to.
-            # The block above this comment forces the credentials to be provided
-            # if they are specified.
-            # TODO: Fix the code below.
-                
-            #passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
-            #passman.add_password("Posterous", 'posterous.com', self.api.username, self.api.password)
-            #authhandler = urllib2.HTTPBasicAuthHandler(passman)
-            #opener = urllib2.build_opener(authhandler)
-            #urllib2.install_opener(opener)
-            
+            # Generate a request object
+            req = self.api.auth.gen_request(self.url)
+        
             try:
                 resource = urllib2.urlopen(req, self.args)
             except urllib2.HTTPError as e:
