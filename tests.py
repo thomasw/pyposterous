@@ -19,8 +19,10 @@ except:
     name_of_first_blog = 'pyposttest'
 
     # Twitter - Enter Twitter credentials below
-    t_username = 'test'
-    t_password = 'test'
+    consumer_key = "test"
+    consumer_secret = "test"
+    user_key = "test"
+    user_secret = "test"
 
 class PyposterousAPITests(unittest.TestCase):    
     def setUp(self):
