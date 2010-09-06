@@ -10,7 +10,7 @@ setup(name="pyposterous",
       author_email="info@matchstrike.net",
       url="http://github.com/thomasw/pyposterous",
       dependency_links=["http://github.com/thomasw/urllib2_file/tarball/master#egg=urllib2_file",],
-      install_requires=["urllib2_file",],
+      install_requires=["urllib2_file", "oauth2"],
       packages = find_packages(),
       keywords= "posterous library",
       zip_safe = False)
