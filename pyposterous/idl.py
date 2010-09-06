@@ -162,6 +162,7 @@ METHODS = {
                 ('sourceLink', basestring, ['optional']),            
             ],
             'auth_required':False,
+            'twitter_auth_required':True,
             '__doc__':"""Posts text and files on Posterous using Twitter credentials.
             Returns an Image object, with a user attribute that represents the
             Twitter user that was used for authentication. This method requires
@@ -194,6 +195,13 @@ METHODS = {
             'path':'TEST',
             'parameters':[],
             'auth_required':True,
+            '__doc__':"Not a real API call. Only used by the unit tests.",
+        },
+        'test_twitter_auth_required':{
+            'path':'TEST',
+            'parameters':[],
+            'auth_required':False,
+            'twitter_auth_required':True,
             '__doc__':"Not a real API call. Only used by the unit tests.",
         },
         'test_all_optional':{
