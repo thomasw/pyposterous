@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 
 setup(name="pyposterous",
-      version="0.2.2",
+      version="0.3.0",
       description="Posterous library for python",
       license="MIT",
       author="Thomas Welfley",
