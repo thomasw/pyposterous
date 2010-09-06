@@ -162,8 +162,10 @@ METHODS = {
                 ('sourceLink', basestring, ['optional']),            
             ],
             'auth_required':False,
-            '__doc__':"""Post text and files on Posterous using Twitter credentials.
-            Returns a dictionary containing mediaid and mediaurl.
+            '__doc__':"""Posts text and files on Posterous using Twitter credentials.
+            Returns an Image object, with a user attribute that represents the
+            Twitter user that was used for authentication. This method requires
+            that the parameter pased to auth is an instance of Pyposterous.auth.TwitterAuth.
             
             Keyword arguments:
             
