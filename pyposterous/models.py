@@ -1,5 +1,5 @@
 from pyposterous.error import PyposterousError
-from pyposterous.utils import parse_date
+from pyposterous.utils import parse_date, try_parse_int
 
 class PosterousData(object):
     def __init__(self, api):
@@ -112,6 +112,9 @@ class Media(PosterousData):
 class Image(PosterousData):
     pass
 
+class User(PosterousData):
+    pass
+
 # Posterous element -> class mapping
 element_map = {
     'site':Site,
@@ -121,11 +124,14 @@ element_map = {
     'thumb':Image,
     'medium':Image,
     'tag':Tag,
+    'image':Image,
+    'user':User
     }
 
 # Attributes specified in the key are cleaned by the function specified in 
 # the value
 attribute_map = {
+    ('id'):lambda x: try_parse_int(x),
     ('id', 'views', 'filesize', 'height', 'width', 'commentscount', 'num_posts',):int,
     ('private', 'commentsenabled', 'primary'):lambda x: x.upper() == 'TRUE',
     ('body',):lambda x: x.strip(), # Hopefully whitespace will not be significant. 

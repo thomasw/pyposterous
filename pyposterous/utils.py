@@ -47,3 +47,8 @@ def parse_date(time_string):
     
     return datetime.strptime(time_string[:-6], '%a, %d %b %Y %H:%M:%S') - utcoffset
 
+def try_parse_int(number):
+    try:
+        return int(number)
+    except:
+        return "%s" % number
