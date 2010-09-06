@@ -94,10 +94,24 @@ Updating the posted article::
 	# Hard way
 	api.update_post(post_id=post.id, title="TEST TEST TEST TEST", body="This title is so much more appropriate.")
 
+Twitter Methods
+===============
+
+Posterous allows you to post articles to their service on the behalf of your Twitter users via `Twitter's OAuth Echo implementation <http://dev.twitter.com/pages/oauth_echo>`_. That might seem a little complicated, but here's the gist of it: You provide Pyposterous your consumer key, consumer secret, a user's key, and a user's secret, and the library signs your request so that Posterous can ask Twitter if your app is really authorized to access the Twitter user's account. If it is, Posterous will post whatever data you sent to it as long as it meets their criteria.
+
+In practice, there's an important difference between Twitter methods and the other authenticated methods. You don't pass your OAuth credentials directly to the API constructor. Instead, you'd do it like this::
+
+	from pyposterous import API
+	from pyposterous.auth import TwitterAuth
+	
+	api = API(auth=TwitterAuth("consumer_key", "consumer_secret", "user_key", "user_secret"))
+
+	api.upload(message="This is the post title", body="This is the post body")
+
 Data Returned
 =============
 
-All API methods (with the exception of :ref:`upload <upload_method>` and :ref:`upload_and_post <upload_and_post_method>`) will return an object or list of objects that are instances of one of following classes:
+All API methods will return an object or list of objects that are instances of one of following classes:
 
 * :ref:`Post <post_class>`
 * :ref:`Site <site_class>`
