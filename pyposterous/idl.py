@@ -150,13 +150,11 @@ METHODS = {
             """
         },
     },
-    # Twitter auth methods
+    # TwitterAuth methods
     'twitter': {
         'upload':{
-            'path':'/api/upload',
+            'path':'/api2/upload.xml',
             'parameters':[
-                ('username', basestring, []),
-                ('password', basestring, []),
                 ('media', (file, list), ['optional']),
                 ('message', basestring, ['optional']),
                 ('body', basestring, ['optional']),
@@ -164,14 +162,11 @@ METHODS = {
                 ('sourceLink', basestring, ['optional']),            
             ],
             'auth_required':False,
-            'returns':['force_primative',],
             '__doc__':"""Post text and files on Posterous using Twitter credentials.
             Returns a dictionary containing mediaid and mediaurl.
             
             Keyword arguments:
             
-            * username -- Twitter username
-            * password -- Twitter password
             * media -- Optional. File object for single file or a list of file objects.
             * message -- Optional. Title of post
             * body -- Optional. Body of post
@@ -179,35 +174,6 @@ METHODS = {
             * sourceLink -- Optional. Link to your application or website            
             
             """   
-        },
-        'upload_and_post':{
-            'path':'/api/uploadAndPost',
-            'parameters':[
-                ('username', basestring, []),
-                ('password', basestring, []),
-                ('media', (file, list), ['optional']),
-                ('message', basestring, ['optional']),
-                ('body', basestring, ['optional']),
-                ('source', basestring, ['optional']),
-                ('sourceLink', basestring, ['optional']),            
-            ],
-            'auth_required':False,
-            'returns':['force_primative',],
-            '__doc__':"""Post text and files on Posterous using Twitter 
-            credentials and then tweet a message with a link to the post. Returns
-            a dictionary containing mediaid and mediaurl.
-            
-            Keyword arguments:
-            
-            * username -- Twitter username
-            * password -- Twitter password
-            * media -- Optional. File object for single file or a list of file objects.
-            * message -- Optional. Title of post
-            * body -- Optional. Body of post
-            * source -- Optional. The name of your application or website
-            * sourceLink -- Optional. Link to your application or website            
-            
-            """        
         },
     },
     # NOT REAL API CALLS - used for testing.
