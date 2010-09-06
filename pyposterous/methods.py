@@ -6,6 +6,7 @@ from pyposterous.idl import METHODS
 from pyposterous.parser import Parser
 from pyposterous.utils import docstring_trim
 from pyposterous.models import Tag
+from pyposterous.auth import TwitterAuth, BasicAuth
 
 def build_method(**conf):
     """
@@ -18,12 +19,19 @@ def build_method(**conf):
             self.path = conf.get('path')
             self.params = conf.get('parameters', [])
             self.auth_required = conf.get('auth_required', False)
+            self.twitter_auth_required = conf.get('twitter_auth_required', False)
             self.returns = conf.get('returns', [])
             
             # Raise an exception if authentication is required but credentials
             # are not specified
+            if self.auth_required and not isinstance(self.api.auth, BasicAuth):
+                raise PyposterousError("The API object's auth attribute most be an instance of pyposterous.auth.BasicAuth to use this method.")
+            
             if self.auth_required and not (self.api.auth.username and self.api.auth.password):           
-                raise PyposterousError('Authentication is required to use this method.')
+                raise PyposterousError('A username and password is required to use this method.')
+                
+            if self.twitter_auth_required and not isinstance(self.api.auth, TwitterAuth):
+                raise PyposterousError("The API object's auth attribute most be an instance of pyposterous.auth.TwitterAuth to use this method.")
             
             self.url = "http://%s%s" % (self.api.host, self.path)
             self.__verify_args(list(args), kwargs)
