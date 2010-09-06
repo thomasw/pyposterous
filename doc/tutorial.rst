@@ -26,8 +26,6 @@ Here's a list of methods that you can use without authenticating:
 #. :ref:`read_posts <read_posts_method>`
 #. :ref:`get_tags <get_tags_method>`
 #. :ref:`get_post <get_post_method>`
-#. :ref:`upload <upload_method>` (requires Twitter credentials)
-#. :ref:`upload_and_post <upload_and_post_method>` (requires Twitter credentials)
 
 As you might expect, read_posts won't return private posts and get_tags won't return tags of private posts/sites if you're not authenticated.
 
