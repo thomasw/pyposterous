@@ -1,7 +1,7 @@
 # Pyposterous
 Pyposterous is a wrapper for the [Posterous API](http://posterous.com/api) written in Python.
 
-Currently (4/26/2010), Pyposterous has 100% API coverage.
+Currently (9/6/2010), Pyposterous has 100% API coverage.
 
 ## Install
 
@@ -15,6 +15,7 @@ Alternatively, just put the pyposterous subdirectory of this repo somewhere on y
 
 * [urllib2_file](http://github.com/seisen/urllib2_file)
 * [ElementTree](http://effbot.org/zone/element-index.htm) (included in Python >2.5)
+* [oauth2](http://github.com/simplegeo/python-oauth2)
 
 ## Usage
 
@@ -77,7 +78,15 @@ The read\_posts results are paginated, meaning that only **num_posts** results a
         print "%s -- %s" % (post.title, post.url)
 
 The cursor object will retrieve additional pages of results as they're needed.
-    
+
+In order to use the Twitter based Posterous methods, you'll need to instantiate your own API object and pass it a TwitterAuth instance:
+
+	from pyposterous.auth import TwitterAuth
+	api = pyposterous.API(auth=TwitterAuth("consumer_key", "consumer_secret", "user_key", "user_secret"))
+	
+	post = api.upload(message="This is the title.", body="This is the post body.")
+    print post.url
+
 ## Everything else
 If you'd like to hire me, check out the [Match Strike](http://matchstrike.net/) site.
 
