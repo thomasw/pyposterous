@@ -3,12 +3,18 @@ import types
 from pyposterous.error import PyposterousError
 from pyposterous.methods import build_method
 from pyposterous.idl import METHODS
-
+from pyposterous.auth import Auth, BasicAuth
 class API(object):
     """Posterous API"""    
-    def __init__(self, username='', password='', host='posterous.com'):
-        self.username = username
-        self.password = password
+    def __init__(self, username=None, password=None, auth=BasicAuth(), host='posterous.com'):
+        self.auth = auth
+        
+        if username and password:
+            self.auth = BasicAuth(username, password)
+        
+        if not isinstance(self.auth, Auth):
+            raise TypeError("auth most be an instance of class that is a subclass of pyposterous.auth.Auth")
+        
         self.host = host
         
         # Add API methods based on the IDL.
