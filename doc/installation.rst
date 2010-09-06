@@ -26,4 +26,5 @@ To install Pyposterous manually, just put the pyposterous subdirectory of the `p
 
 * `urllib2_file <http://github.com/seisen/urllib2_file>`_
 * `ElementTree <http://effbot.org/zone/element-index.htm>`_ (included in Python >2.5)
+* `OAuth2 <http://github.com/simplegeo/python-oauth2>`_
 
