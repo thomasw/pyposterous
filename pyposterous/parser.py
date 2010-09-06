@@ -38,39 +38,46 @@ class Parser(object):
                 # caught and thrown.
                 self.output = []          
         
-        for element in self.xml.getroot().getchildren():
-            obj = self.build_object(element)
-            if obj:
-                # Okay. This is a little weird. When the Posterous API returns
-                # results, it sometimes returns children elements as children
-                # of their parent (e.g. comments as children of their post),
-                # and sometimes they don't do that, and they just give 
-                # everything as a big hairy list (e.g. both the post AND
-                # its comments at the top level). TODO: Ask dev group about this
+        root = self.xml.getroot()
+        # Some V2 api calls return the output as the root of the document.
+        # this should handle those cases.
+        if root.tag in element_map:
+            self.output.append(self.build_object(root))
+        else:
+            # v1 stuff.
+            for element in root.getchildren():
+                obj = self.build_object(element)
+                if obj:
+                    # Okay. This is a little weird. When the Posterous API returns
+                    # results, it sometimes returns children elements as children
+                    # of their parent (e.g. comments as children of their post),
+                    # and sometimes they don't do that, and they just give 
+                    # everything as a big hairy list (e.g. both the post AND
+                    # its comments at the top level). TODO: Ask dev group about this
                 
-                # To fix this problem, I'm going to append subsequent elements
-                # to the previous element returned if the types don't match.
-                # 3 posts will return a list of 3 posts, 1 post and 2 comments
-                # will return 1 post with a list of 2 comments as an attrib.
+                    # To fix this problem, I'm going to append subsequent elements
+                    # to the previous element returned if the types don't match.
+                    # 3 posts will return a list of 3 posts, 1 post and 2 comments
+                    # will return 1 post with a list of 2 comments as an attrib.
                 
-                try:
-                    if type(obj) == type(self.output[-1]):
-                        self.output.append(obj)
-                    else:
-                        attrib = obj.__class__.__name__.lower()
-                        
-                        existing = getattr(self.output[-1], attrib, None)                        
-                        if existing and type(existing) == list:
-                            existing.append(obj)
-                        elif not existing:
-                            setattr(self.output[-1], attrib, [obj,])
+                    try:
+                        if type(obj) == type(self.output[-1]):
+                            self.output.append(obj)
                         else:
-                            # If this happens, then my little XML inconsistency
-                            # hack is overwritting a legitimate value.
-                            raise PyposterousError("Posterous API response could not be parsed.")
-                except IndexError:
-                    # There was no previous element!
-                    self.output.append(obj)
+                            attrib = obj.__class__.__name__.lower()
+                        
+                            existing = getattr(self.output[-1], attrib, None)                        
+                            if existing and type(existing) == list:
+                                existing.append(obj)
+                            elif not existing:
+                                setattr(self.output[-1], attrib, [obj,])
+                            else:
+                                # If this happens, then my little XML inconsistency
+                                # hack is overwritting a legitimate value.
+                                raise PyposterousError("Posterous API response could not be parsed.")
+                    except IndexError:
+                        # There was no previous element!
+                        self.output.append(obj)
         
         self.output = self.clean_up(self.output)
         output = self.output
@@ -87,7 +94,7 @@ class Parser(object):
     def build_object(self, element):
         """Accepts an element tree element and builds an object based on the
         type."""
-        if element.tag == 'err':
+        if element.tag == 'err' or element.tag == 'error':
             self.build_error(element)
         
         obj = element_map.get(element.tag)
@@ -168,7 +175,22 @@ class Parser(object):
     def build_error(self, element):
         """Throws a PyposterousError based on the element specified.
         """
-        raise PyposterousError(element.get('msg'), element.get('code'))
+        # This handles v1 api errors (business as usual)
+        if element.tag == 'err':
+            raise PyposterousError(element.get('msg'), element.get('code'))
+        
+        # Api v2 errors are formatted differently than API v1 errors. This is
+        # dirty, but it'll prase them.
+        message = "Unknown"
+        code = "Unknown"
+        for child in element.getchildren():
+            if child.tag == "message":
+                message = child.text
+            
+            if child.tag == "code":
+                code = child.text
+                
+        raise PyposterousError("%s" % message, "%s" % code)
     
     def clean_value(self, name, value):
         for names in attribute_map:
