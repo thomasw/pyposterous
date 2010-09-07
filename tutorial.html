@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -5,21 +6,22 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Using Pyposterous &mdash; Pyposterous v0.2.1 documentation</title>
-    <link rel="stylesheet" href="static/default.css" type="text/css" />
-    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    <title>Using Pyposterous &mdash; Pyposterous v0.3.0 documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '#',
-        VERSION:     '0.2.1',
-        COLLAPSE_MODINDEX: false,
+        URL_ROOT:    '',
+        VERSION:     '0.3.0',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="static/jquery.js"></script>
-    <script type="text/javascript" src="static/doctools.js"></script>
-    <link rel="top" title="Pyposterous v0.2.1 documentation" href="index.html" />
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Pyposterous v0.3.0 documentation" href="index.html" />
     <link rel="next" title="API Reference" href="api_reference.html" />
     <link rel="prev" title="Installation" href="installation.html" /> 
   </head>
@@ -36,7 +38,7 @@
         <li class="right" >
           <a href="installation.html" title="Installation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Pyposterous v0.2.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Pyposterous v0.3.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -63,11 +65,9 @@
 </div>
 <p>Here&#8217;s a list of methods that you can use without authenticating:</p>
 <ol class="arabic simple">
-<li><a class="reference external" href="api_reference.html#read-posts-method"><em>read_posts</em></a></li>
-<li><a class="reference external" href="api_reference.html#get-tags-method"><em>get_tags</em></a></li>
-<li><a class="reference external" href="api_reference.html#get-post-method"><em>get_post</em></a></li>
-<li><a class="reference external" href="api_reference.html#upload-method"><em>upload</em></a> (requires Twitter credentials)</li>
-<li><a class="reference external" href="api_reference.html#upload-and-post-method"><em>upload_and_post</em></a> (requires Twitter credentials)</li>
+<li><a class="reference internal" href="api_reference.html#read-posts-method"><em>read_posts</em></a></li>
+<li><a class="reference internal" href="api_reference.html#get-tags-method"><em>get_tags</em></a></li>
+<li><a class="reference internal" href="api_reference.html#get-post-method"><em>get_post</em></a></li>
 </ol>
 <p>As you might expect, read_posts won&#8217;t return private posts and get_tags won&#8217;t return tags of private posts/sites if you&#8217;re not authenticated.</p>
 <p>Here&#8217;s how to get all public posts tagged with &#8216;api&#8217; from a site:</p>
@@ -98,10 +98,10 @@
 <p>Note the difference in case from our earlier code. pyposterous.API is the class and pyposterous.api is an unauthenticated instance of the API class.</p>
 <p>With an authenticated API instance, you can then call the following without Pyposterous raising an exception:</p>
 <ol class="arabic simple">
-<li><a class="reference external" href="api_reference.html#get-sites-method"><em>get_sites</em></a></li>
-<li><a class="reference external" href="api_reference.html#new-post-method"><em>new_post</em></a></li>
-<li><a class="reference external" href="api_reference.html#update-post-method"><em>update_post</em></a></li>
-<li><a class="reference external" href="api_reference.html#new-comment-method"><em>new_comment</em></a></li>
+<li><a class="reference internal" href="api_reference.html#get-sites-method"><em>get_sites</em></a></li>
+<li><a class="reference internal" href="api_reference.html#new-post-method"><em>new_post</em></a></li>
+<li><a class="reference internal" href="api_reference.html#update-post-method"><em>update_post</em></a></li>
+<li><a class="reference internal" href="api_reference.html#new-comment-method"><em>new_comment</em></a></li>
 </ol>
 <p>One of the most important authenticated method is get_sites. It returns a list of all the authenticated user&#8217;s sites:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">sites</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">get_sites</span><span class="p">()</span>
@@ -133,17 +133,31 @@
 </pre></div>
 </div>
 </div>
+<div class="section" id="twitter-methods">
+<h2>Twitter Methods<a class="headerlink" href="#twitter-methods" title="Permalink to this headline">¶</a></h2>
+<p>Posterous allows you to post articles to their service on the behalf of your Twitter users via <a class="reference external" href="http://dev.twitter.com/pages/oauth_echo">Twitter&#8217;s OAuth Echo implementation</a>. That might seem a little complicated, but here&#8217;s the gist of it: You provide Pyposterous your consumer key, consumer secret, a user&#8217;s key, and a user&#8217;s secret, and the library signs your request so that Posterous can ask Twitter if your app is really authorized to access the Twitter user&#8217;s account. If it is, Posterous will post whatever data you sent to it as long as it meets their criteria.</p>
+<p>In practice, there&#8217;s an important difference between Twitter methods and the other authenticated methods. You don&#8217;t pass your OAuth credentials directly to the API constructor. Instead, you&#8217;d do it like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pyposterous</span> <span class="kn">import</span> <span class="n">API</span>
+<span class="kn">from</span> <span class="nn">pyposterous.auth</span> <span class="kn">import</span> <span class="n">TwitterAuth</span>
+
+<span class="n">api</span> <span class="o">=</span> <span class="n">API</span><span class="p">(</span><span class="n">auth</span><span class="o">=</span><span class="n">TwitterAuth</span><span class="p">(</span><span class="s">&quot;consumer_key&quot;</span><span class="p">,</span> <span class="s">&quot;consumer_secret&quot;</span><span class="p">,</span> <span class="s">&quot;user_key&quot;</span><span class="p">,</span> <span class="s">&quot;user_secret&quot;</span><span class="p">))</span>
+
+<span class="n">api</span><span class="o">.</span><span class="n">upload</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="s">&quot;This is the post title&quot;</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="s">&quot;This is the post body&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="data-returned">
 <h2>Data Returned<a class="headerlink" href="#data-returned" title="Permalink to this headline">¶</a></h2>
-<p>All API methods (with the exception of <a class="reference external" href="api_reference.html#upload-method"><em>upload</em></a> and <a class="reference external" href="api_reference.html#upload-and-post-method"><em>upload_and_post</em></a>) will return an object or list of objects that are instances of one of following classes:</p>
+<p>All API methods will return an object or list of objects that are instances of one of following classes:</p>
 <ul class="simple">
-<li><a class="reference external" href="api_reference.html#post-class"><em>Post</em></a></li>
-<li><a class="reference external" href="api_reference.html#site-class"><em>Site</em></a></li>
-<li><a class="reference external" href="api_reference.html#tag-class"><em>Tag</em></a></li>
-<li><a class="reference external" href="api_reference.html#comment-class"><em>Comment</em></a></li>
+<li><a class="reference internal" href="api_reference.html#post-class"><em>Post</em></a></li>
+<li><a class="reference internal" href="api_reference.html#site-class"><em>Site</em></a></li>
+<li><a class="reference internal" href="api_reference.html#tag-class"><em>Tag</em></a></li>
+<li><a class="reference internal" href="api_reference.html#comment-class"><em>Comment</em></a></li>
+<li><a class="reference internal" href="api_reference.html#image-class"><em>Image</em></a></li>
 </ul>
 <p>Due to Posterous API inconsistencies, instances of the same type will not always have the same set of attributes. Read, bookmark, and re-read the <a class="reference external" href="http://posterous.com/api">Posterous API docs</a>, as they indicate the set of data that each API call will return.</p>
-<p>In addition to the Post, Site, Comment, and Tag classes, there are also <a class="reference external" href="api_reference.html#image-class"><em>Image</em></a> and <a class="reference external" href="api_reference.html#media-class"><em>Media</em></a> classes. Your application will only encounter these as children of Post objects:</p>
+<p>In addition to the Post, Site, Comment, Tag, and Image classes there is also <a class="reference internal" href="api_reference.html#user-class"><em>User</em></a> and <a class="reference internal" href="api_reference.html#media-class"><em>Media</em></a> classes. Your application will only encounter these as children of the objects listed above:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># Returns a list of media instances</span>
 <span class="n">post</span><span class="o">.</span><span class="n">media</span>
 
@@ -157,8 +171,8 @@
 <span class="n">post</span><span class="o">.</span><span class="n">comments</span>
 </pre></div>
 </div>
-<p>Some of these objects have <a class="reference external" href="api_reference.html#helper-functions"><em>helper methods</em></a>. For example, Post instances have a method that makes submitting updated content super easy.</p>
-<p>Read the <a class="reference external" href="api_reference.html#helper-functions"><em>documentation about helper methods</em></a>. Using these methods will make your code much cleaner.</p>
+<p>Some of these objects have <a class="reference internal" href="api_reference.html#helper-functions"><em>helper methods</em></a>. For example, Post instances have a method that makes submitting updated content super easy.</p>
+<p>Read the <a class="reference internal" href="api_reference.html#helper-functions"><em>documentation about helper methods</em></a>. Using these methods will make your code much cleaner.</p>
 </div>
 <div class="section" id="uploading-media">
 <h2>Uploading Media<a class="headerlink" href="#uploading-media" title="Permalink to this headline">¶</a></h2>
@@ -180,24 +194,6 @@
 </pre></div>
 </div>
 </div>
-<div class="section" id="twitter-methods">
-<h2>Twitter Methods<a class="headerlink" href="#twitter-methods" title="Permalink to this headline">¶</a></h2>
-<p>Posterous has two API calls that use Twitter credentials instead of Posterous credentials. In both cases, the functions that represent those calls require a twitter username and a twitter password as parameters.</p>
-<p>Here&#8217;s an upload example (which doesn&#8217;t post a Tweet to the user&#8217;s Twitter account):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">post1</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">upload</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">&#39;twitter_username&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">&#39;twitter_password&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;Yay&quot;</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="s">&quot;Body of post!&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>upload_and_post works the same way, but upload_and_post will also Tweet a link to your new article using the specified twitter credentials.</p>
-<p>Both methods return a dictionary that contains the following data:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">post1</span><span class="p">[</span><span class="s">&#39;mediaid&#39;</span><span class="p">]</span>
-<span class="n">post1</span><span class="p">[</span><span class="s">&#39;mediaurl&#39;</span><span class="p">]</span>
-</pre></div>
-</div>
-<p>If necessary, you can retrieve a post object representing your uploaded content by using get_post:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">post1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_post</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">post2</span><span class="p">[</span><span class="s">&#39;mediaurl&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;http://post.ly/&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
 <div class="section" id="paginated-results-cursor-tutorial">
 <h2>Paginated Results (Cursor Tutorial)<a class="headerlink" href="#paginated-results-cursor-tutorial" title="Permalink to this headline">¶</a></h2>
 <p>Results returned by read_posts are paginated with a limited number of posts returned per page. Thus, just calling read_posts with a site specified will not necessarily return all posts on that site. In fact, it would only return the first page of results.</p>
@@ -209,7 +205,7 @@
         <span class="k">print</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s"> -- </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">post</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">post</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This may seem a little tricky at first, but it&#8217;s really not that bad. You just need to create a cursor object, specify which method that you want it to call to retrieve posts, and then iterate as if you were looping over a list. Your cursor object will then automatically retrieve new pages as needed. Check out the <a class="reference external" href="api_reference.html#cursor-class"><em>Cursor documentation</em></a> for additional information.</p>
+<p>This may seem a little tricky at first, but it&#8217;s really not that bad. You just need to create a cursor object, specify which method that you want it to call to retrieve posts, and then iterate as if you were looping over a list. Your cursor object will then automatically retrieve new pages as needed. Check out the <a class="reference internal" href="api_reference.html#cursor-class"><em>Cursor documentation</em></a> for additional information.</p>
 <p>The only API call that returns paginated data is read_posts. This means that the Cursor class can only be used with API.read_posts and Site.read_posts. If anything else is passed to the method parameter, an exception will be raised.</p>
 </div>
 </div>
@@ -220,44 +216,44 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            <h3><a href="index.html">Table Of Contents</a></h3>
-            <ul>
-<li><a class="reference external" href="#">Using Pyposterous</a><ul>
-<li><a class="reference external" href="#introduction">Introduction</a></li>
-<li><a class="reference external" href="#unauthenticated-methods">Unauthenticated Methods</a></li>
-<li><a class="reference external" href="#authenticated-methods">Authenticated Methods</a></li>
-<li><a class="reference external" href="#data-returned">Data Returned</a></li>
-<li><a class="reference external" href="#uploading-media">Uploading Media</a></li>
-<li><a class="reference external" href="#twitter-methods">Twitter Methods</a></li>
-<li><a class="reference external" href="#paginated-results-cursor-tutorial">Paginated Results (Cursor Tutorial)</a></li>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Using Pyposterous</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#unauthenticated-methods">Unauthenticated Methods</a></li>
+<li><a class="reference internal" href="#authenticated-methods">Authenticated Methods</a></li>
+<li><a class="reference internal" href="#twitter-methods">Twitter Methods</a></li>
+<li><a class="reference internal" href="#data-returned">Data Returned</a></li>
+<li><a class="reference internal" href="#uploading-media">Uploading Media</a></li>
+<li><a class="reference internal" href="#paginated-results-cursor-tutorial">Paginated Results (Cursor Tutorial)</a></li>
 </ul>
 </li>
 </ul>
 
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="installation.html"
-                                  title="previous chapter">Installation</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="api_reference.html"
-                                  title="next chapter">API Reference</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="sources/tutorial.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="installation.html"
+                        title="previous chapter">Installation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api_reference.html"
+                        title="next chapter">API Reference</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/tutorial.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -274,12 +270,13 @@
         <li class="right" >
           <a href="installation.html" title="Installation"
              >previous</a> |</li>
-        <li><a href="index.html">Pyposterous v0.2.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Pyposterous v0.3.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      &copy; Copyright 2010, Thomas Welfley.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.5.
+        &copy; Copyright 2010, Thomas Welfley.
+      Last updated on Sep 07, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.3.
     </div>
   </body>
 </html>
