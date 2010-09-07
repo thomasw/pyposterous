@@ -54,9 +54,6 @@ Posterous' Twitter methods. See http://posterous.com/api/twitter for more inform
 .. _upload_method:
 .. automethod:: pyposterous.api.upload
 
-.. _upload_and_post_method:
-.. automethod:: pyposterous.api.upload_and_post
-
 Data Classes and Helper Methods
 ===============================
 
@@ -69,7 +66,7 @@ Many of the classes include helper functions that make working with Pyposterous 
 .. _post_class:
 .. autoclass:: pyposterous.models.Post
 	:members:
-	
+
 .. _site_class:
 .. autoclass:: pyposterous.models.Site
 	:members:
@@ -85,11 +82,15 @@ Many of the classes include helper functions that make working with Pyposterous 
 .. _media_class:
 .. autoclass:: pyposterous.models.Media
 	:members:
-	
+
 .. _image_class:
 .. autoclass:: pyposterous.models.Image
 	:members:
-	
+
+.. _user_class:
+.. autoclass:: pyposterous.models.User
+	:members:
+
 Cursor
 ======
 

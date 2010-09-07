@@ -14,6 +14,7 @@ Contents:
    installation.rst
    tutorial.rst
    api_reference.rst
+   changelog.rst
 
 Indices and tables
 ==================
