@@ -164,9 +164,11 @@ METHODS = {
             'auth_required':False,
             'twitter_auth_required':True,
             '__doc__':"""Posts text and files on Posterous using Twitter credentials.
-            Returns an Image object, with a user attribute that represents the
-            Twitter user that was used for authentication. This method requires
-            that the parameter pased to auth is an instance of Pyposterous.auth.TwitterAuth.
+            Returns an Image object with a user attribute that represents the
+            Twitter user that was used for authentication.
+            
+            In order to use this function, the auth instance passed to the API class constructor
+            must be an instance of Pyposterous.auth.TwitterAuth.
             
             Keyword arguments:
             
