@@ -117,10 +117,11 @@ All API methods will return an object or list of objects that are instances of o
 * :ref:`Site <site_class>`
 * :ref:`Tag <tag_class>`
 * :ref:`Comment <comment_class>`
+* :ref:`Image <image_class>`
 
 Due to Posterous API inconsistencies, instances of the same type will not always have the same set of attributes. Read, bookmark, and re-read the `Posterous API docs <http://posterous.com/api>`_, as they indicate the set of data that each API call will return.
 
-In addition to the Post, Site, Comment, and Tag classes, there are also :ref:`Image <image_class>` and :ref:`Media <media_class>` classes. Your application will only encounter these as children of Post objects::
+In addition to the Post, Site, Comment, Tag, and Image classes there is also :ref:`User <user_class>` and :ref:`Media <media_class>` classes. Your application will only encounter these as children of the objects listed above::
 
 	# Returns a list of media instances
 	post.media
@@ -159,26 +160,6 @@ Pyposterous can also handle cases where there are multiple media assets that nee
 	post = api.new_post(title=title, media=images)
 	[image.close() for image in images]
 	
-
-Twitter Methods
-===============
-
-Posterous has two API calls that use Twitter credentials instead of Posterous credentials. In both cases, the functions that represent those calls require a twitter username and a twitter password as parameters.
-
-Here's an upload example (which doesn't post a Tweet to the user's Twitter account)::
-
-	post1 = api.upload(username='twitter_username', password='twitter_password', title="Yay", body="Body of post!")
-
-upload_and_post works the same way, but upload_and_post will also Tweet a link to your new article using the specified twitter credentials.
-
-Both methods return a dictionary that contains the following data::
-
-	post1['mediaid']
-	post1['mediaurl']
-	
-If necessary, you can retrieve a post object representing your uploaded content by using get_post::
-
-	post1 = self.api.get_post(id=post2['mediaurl'].replace('http://post.ly/', ''))
 
 Paginated Results (Cursor Tutorial)
 ===================================
