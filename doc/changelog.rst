@@ -4,6 +4,10 @@
 ChangeLog
 ************
 
+Pyposterous v0.3.1
+==================
+* Fixed a Python 2.5 incompatibility that prevented Pyposterous from working in Python <2.6
+
 Pyposterous v0.3.0
 ==================
 
