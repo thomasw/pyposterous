@@ -147,10 +147,10 @@ def build_method(**conf):
             
             # Generate a request object
             req = self.api.auth.gen_request(self.url)
-        
+            
             try:
                 resource = urllib2.urlopen(req, self.args)
-            except urllib2.HTTPError as e:
+            except (urllib2.HTTPError,), e:
                 resource = e
             parser = Parser(self.api, resource, self.returns)
             
