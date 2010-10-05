@@ -124,7 +124,16 @@ class Parser(object):
         # Add properties for all of element's children        
         for prop in element.getchildren():
             prop_tag = prop.tag.lower()
-            if element_map.get(prop_tag):
+            
+            # If the element doesn't have any chidlren, using the element map obj
+            # will hide the returned data. We don't want that. Most notably, this 
+            # occurs when a post has a video attached to it. The thumb attribute
+            # is typically an Image object, but in the case of the video media
+            # element it's just a URL. The "and prop.getchildren()" should
+            # prevent Pyposterous from doing a conversion to an object for this
+            # anomalous data.
+            
+            if element_map.get(prop_tag) and prop.getchildren():
                 # If the element is one of our base types, we need to create
                 # an object of it.
                 existing = getattr(obj, prop_tag, None)
